@@ -98,8 +98,8 @@ FILE *in;
 %%
 int main()
 {
-    in = fopen("./input/testfile.txt", "r");
-    out = fopen("./output/output.txt", "w");
+    in = fopen("testfile.txt", "r");
+    out = fopen("output.txt", "w");
     yyin = in;
     yyout = out;
 
