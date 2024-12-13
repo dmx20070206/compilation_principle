@@ -93,8 +93,8 @@ FILE *in;
 "\{"                               { fprintf(out, "LBRACE %s\n", yytext);    RETURN_TOKEN(LBRACE);      }
 "\}"                               { fprintf(out, "RBRACE %s\n", yytext);    RETURN_TOKEN(RBRACE);      }
 
-[ \t\n]                            {                                                              }
-.                                  { fprintf(out, "RBRACE %s\n", yytext);    RETURN_TOKEN(ERROR);       }
+[ \t\n]                            {                                                                    }
+.                                  {                                         RETURN_TOKEN(ERROR);       }
 
 %%
 int main()

@@ -1039,12 +1039,12 @@ case 41:
 /* rule 41 can match eol */
 YY_RULE_SETUP
 #line 96 "lex.l"
-{                                                              }
+{                                                                    }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
 #line 97 "lex.l"
-{ fprintf(out, "RBRACE %s\n", yytext);    RETURN_TOKEN(ERROR);       }
+{                                         RETURN_TOKEN(ERROR);       }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
