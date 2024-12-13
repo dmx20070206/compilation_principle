@@ -49,51 +49,52 @@ FILE *in;
 %}
 
 %%
-"main"                    { fprintf(out, "MAINTK %s\n", yytext);     RETURN_TOKEN(MAINTK);     }
-"while"                   { fprintf(out, "WHILETK %s\n", yytext);    RETURN_TOKEN(WHILETK);    }
-"const"                   { fprintf(out, "CONSTTK %s\n", yytext);    RETURN_TOKEN(CONSTTK);    }
-"getint"                  { fprintf(out, "GETINTTK %s\n", yytext);   RETURN_TOKEN(GETINTTK);   }
-"printf"                  { fprintf(out, "PRINTFTK %s\n", yytext);   RETURN_TOKEN(PRINTFTK);   }
-"break"                   { fprintf(out, "BREAKTK %s\n", yytext);    RETURN_TOKEN(BREAKTK);    }
-"return"                  { fprintf(out, "RETURNTK %s\n", yytext);   RETURN_TOKEN(RETURNTK);   }
-"continue"                { fprintf(out, "CONTINUETK %s\n", yytext); RETURN_TOKEN(CONTINUETK); }
-"if"                      { fprintf(out, "IFTK %s\n", yytext);       RETURN_TOKEN(IFTK);       }
-"else"                    { fprintf(out, "ELSETK %s\n", yytext);     RETURN_TOKEN(ELSETK);     }
-"void"                    { fprintf(out, "VOIDTK %s\n", yytext);     RETURN_TOKEN(VOIDTK);     }
-"int"                     { fprintf(out, "INTTK %s\n", yytext);      RETURN_TOKEN(INTTK);      }
+"main"                             { fprintf(out, "MAINTK %s\n", yytext);     RETURN_TOKEN(MAINTK);     }
+"while"                            { fprintf(out, "WHILETK %s\n", yytext);    RETURN_TOKEN(WHILETK);    }
+"const"                            { fprintf(out, "CONSTTK %s\n", yytext);    RETURN_TOKEN(CONSTTK);    }
+"getint"                           { fprintf(out, "GETINTTK %s\n", yytext);   RETURN_TOKEN(GETINTTK);   }
+"printf"                           { fprintf(out, "PRINTFTK %s\n", yytext);   RETURN_TOKEN(PRINTFTK);   }
+"break"                            { fprintf(out, "BREAKTK %s\n", yytext);    RETURN_TOKEN(BREAKTK);    }
+"return"                           { fprintf(out, "RETURNTK %s\n", yytext);   RETURN_TOKEN(RETURNTK);   }
+"continue"                         { fprintf(out, "CONTINUETK %s\n", yytext); RETURN_TOKEN(CONTINUETK); }
+"if"                               { fprintf(out, "IFTK %s\n", yytext);       RETURN_TOKEN(IFTK);       }
+"else"                             { fprintf(out, "ELSETK %s\n", yytext);     RETURN_TOKEN(ELSETK);     }
+"void"                             { fprintf(out, "VOIDTK %s\n", yytext);     RETURN_TOKEN(VOIDTK);     }
+"int"                              { fprintf(out, "INTTK %s\n", yytext);      RETURN_TOKEN(INTTK);      }
+"/*"[^*]*"*"+([^*/][^*]*"*"+)*"/"  {                                                                    }
+"//".*                             {                                                                    }
 
+[a-zA-Z_][a-zA-Z0-9_]*             { fprintf(out, "IDENFR %s\n", yytext);     RETURN_TOKEN(IDENFR);     }
+[0-9]+                             { fprintf(out, "INTCON %s\n", yytext);     RETURN_TOKEN(INTCON);     }
+\"([^\\\"]|\\.)*\"                 { fprintf(out, "STRCON %s\n", yytext);     RETURN_TOKEN(STRCON);     }
 
-[a-zA-Z_][a-zA-Z0-9_]*    { fprintf(out, "IDENFR %s\n", yytext);     RETURN_TOKEN(IDENFR);     }
-[0-9]+                    { fprintf(out, "INTCON %s\n", yytext);     RETURN_TOKEN(INTCON);     }
-\"([^\\\"]|\\.)*\"        { fprintf(out, "STRCON %s\n", yytext);     RETURN_TOKEN(STRCON);     }
+"\!"                               { fprintf(out, "NOT %s\n", yytext);        RETURN_TOKEN(NOT);        }
+"\*"                               { fprintf(out, "MULT %s\n", yytext);       RETURN_TOKEN(MULT);       }
+"\+"                               { fprintf(out, "PLUS %s\n", yytext);       RETURN_TOKEN(PLUS);       }
+"-"                                { fprintf(out, "MINU %s\n", yytext);       RETURN_TOKEN(MINU);       }
+"/"                                { fprintf(out, "DIV %s\n", yytext);        RETURN_TOKEN(DIV);        }
+"%"                                { fprintf(out, "MOD %s\n", yytext);        RETURN_TOKEN(MOD);        }
+"&&"                               { fprintf(out, "AND %s\n", yytext);        RETURN_TOKEN(AND);        }
+"||"                               { fprintf(out, "OR %s\n", yytext);         RETURN_TOKEN(OR);         }
+"=="                               { fprintf(out, "EQL %s\n", yytext);        RETURN_TOKEN(EQL);        }
+"!="                               { fprintf(out, "NEQ %s\n", yytext);        RETURN_TOKEN(NEQ);        }
+"<="                               { fprintf(out, "LEQ %s\n", yytext);        RETURN_TOKEN(LEQ);        }
+">="                               { fprintf(out, "GEQ %s\n", yytext);        RETURN_TOKEN(GEQ);        }
+"<"                                { fprintf(out, "LSS %s\n", yytext);        RETURN_TOKEN(LSS);        }
+">"                                { fprintf(out, "GRE %s\n", yytext);        RETURN_TOKEN(GRE);        }
 
-"\!"                      { fprintf(out, "NOT %s\n", yytext);        RETURN_TOKEN(NOT);        }
-"\*"                      { fprintf(out, "MULT %s\n", yytext);       RETURN_TOKEN(MULT);       }
-"\+"                      { fprintf(out, "PLUS %s\n", yytext);       RETURN_TOKEN(PLUS);       }
-"-"                       { fprintf(out, "MINU %s\n", yytext);       RETURN_TOKEN(MINU);       }
-"/"                       { fprintf(out, "DIV %s\n", yytext);        RETURN_TOKEN(DIV);        }
-"%"                       { fprintf(out, "MOD %s\n", yytext);        RETURN_TOKEN(MOD);        }
-"&&"                      { fprintf(out, "AND %s\n", yytext);        RETURN_TOKEN(AND);        }
-"||"                      { fprintf(out, "OR %s\n", yytext);         RETURN_TOKEN(OR);         }
-"=="                      { fprintf(out, "EQL %s\n", yytext);        RETURN_TOKEN(EQL);        }
-"!="                      { fprintf(out, "NEQ %s\n", yytext);        RETURN_TOKEN(NEQ);        }
-"<="                      { fprintf(out, "LEQ %s\n", yytext);        RETURN_TOKEN(LEQ);        }
-">="                      { fprintf(out, "GEQ %s\n", yytext);        RETURN_TOKEN(GEQ);        }
-"<"                       { fprintf(out, "LSS %s\n", yytext);        RETURN_TOKEN(LSS);        }
-">"                       { fprintf(out, "GRE %s\n", yytext);        RETURN_TOKEN(GRE);        }
+"="                                { fprintf(out, "ASSIGN %s\n", yytext);    RETURN_TOKEN(ASSIGN);      }
+";"                                { fprintf(out, "SEMICN %s\n", yytext);    RETURN_TOKEN(SEMICN);      }
+","                                { fprintf(out, "COMMA %s\n", yytext);     RETURN_TOKEN(COMMA);       } 
+"\("                               { fprintf(out, "LPARENT %s\n", yytext);   RETURN_TOKEN(LPARENT);     }
+"\)"                               { fprintf(out, "RPARENT %s\n", yytext);   RETURN_TOKEN(RPARENT);     }
+"\["                               { fprintf(out, "LBRACK %s\n", yytext);    RETURN_TOKEN(LBRACK);      }
+"\]"                               { fprintf(out, "RBRACK %s\n", yytext);    RETURN_TOKEN(RBRACK);      }
+"\{"                               { fprintf(out, "LBRACE %s\n", yytext);    RETURN_TOKEN(LBRACE);      }
+"\}"                               { fprintf(out, "RBRACE %s\n", yytext);    RETURN_TOKEN(RBRACE);      }
 
-"="                       { fprintf(out, "ASSIGN %s\n", yytext);    RETURN_TOKEN(ASSIGN);      }
-";"                       { fprintf(out, "SEMICN %s\n", yytext);    RETURN_TOKEN(SEMICN);      }
-","                       { fprintf(out, "COMMA %s\n", yytext);     RETURN_TOKEN(COMMA);       } 
-"\("                      { fprintf(out, "LPARENT %s\n", yytext);   RETURN_TOKEN(LPARENT);     }
-"\)"                      { fprintf(out, "RPARENT %s\n", yytext);   RETURN_TOKEN(RPARENT);     }
-"\["                      { fprintf(out, "LBRACK %s\n", yytext);    RETURN_TOKEN(LBRACK);      }
-"\]"                      { fprintf(out, "RBRACK %s\n", yytext);    RETURN_TOKEN(RBRACK);      }
-"\{"                      { fprintf(out, "LBRACE %s\n", yytext);    RETURN_TOKEN(LBRACE);      }
-"\}"                      { fprintf(out, "RBRACE %s\n", yytext);    RETURN_TOKEN(RBRACE);      }
-
-[ \t\n]                   {                                                              }
-.                         { fprintf(out, "RBRACE %s\n", yytext);    RETURN_TOKEN(ERROR);       }
+[ \t\n]                            {                                                              }
+.                                  { fprintf(out, "RBRACE %s\n", yytext);    RETURN_TOKEN(ERROR);       }
 
 %%
 int main()
