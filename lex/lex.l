@@ -1,8 +1,34 @@
 %top{
+#include <string.h>
 #include <stdio.h>
-FILE *out;
-FILE *in;
+
+#include "yacc/dmx_yacc.hpp"
+
+// some define
+#define YY_TYPEDEF_YY_SIZE_T
+typedef int yy_size_t;
+#define YY_USER_INIT                                         \
+  yycolumn = 0;
+#define YY_USER_ACTION                                       \
+do {                                                         \
+  yylloc->first_line   = yylloc->last_line = yylineno;       \
+  yylloc->first_column = yycolumn;                           \
+  yylloc->last_column  = yylloc->first_column + yyleng - 1;  \
+  yycolumn += yyleng;                                        \
+}                                                            \
+while (0);
 }
+
+/* 词法分析器的基础设置 */
+/* Prevent the need for linking with -lfl */
+%option noyywrap
+%option nounput
+%option noinput
+/* 与yacc的接口,生成与 Bison 的纯解析器(pure parser)兼容的代码 */
+%option bison-bridge   
+%option reentrant
+/* 支持位置跟踪 */
+%option bison-locations
 
 %{
 #define RETURN_TOKEN(token) return token;
@@ -83,33 +109,21 @@ FILE *in;
 "<"                                { fprintf(out, "LSS %s\n", yytext);        RETURN_TOKEN(LSS);        }
 ">"                                { fprintf(out, "GRE %s\n", yytext);        RETURN_TOKEN(GRE);        }
 
-"="                                { fprintf(out, "ASSIGN %s\n", yytext);    RETURN_TOKEN(ASSIGN);      }
-";"                                { fprintf(out, "SEMICN %s\n", yytext);    RETURN_TOKEN(SEMICN);      }
-","                                { fprintf(out, "COMMA %s\n", yytext);     RETURN_TOKEN(COMMA);       } 
-"\("                               { fprintf(out, "LPARENT %s\n", yytext);   RETURN_TOKEN(LPARENT);     }
-"\)"                               { fprintf(out, "RPARENT %s\n", yytext);   RETURN_TOKEN(RPARENT);     }
-"\["                               { fprintf(out, "LBRACK %s\n", yytext);    RETURN_TOKEN(LBRACK);      }
-"\]"                               { fprintf(out, "RBRACK %s\n", yytext);    RETURN_TOKEN(RBRACK);      }
-"\{"                               { fprintf(out, "LBRACE %s\n", yytext);    RETURN_TOKEN(LBRACE);      }
-"\}"                               { fprintf(out, "RBRACE %s\n", yytext);    RETURN_TOKEN(RBRACE);      }
+"="                                { fprintf(out, "ASSIGN %s\n", yytext);     RETURN_TOKEN(ASSIGN);     }
+";"                                { fprintf(out, "SEMICN %s\n", yytext);     RETURN_TOKEN(SEMICN);     }
+","                                { fprintf(out, "COMMA %s\n", yytext);      RETURN_TOKEN(COMMA);      } 
+"\("                               { fprintf(out, "LPARENT %s\n", yytext);    RETURN_TOKEN(LPARENT);    }
+"\)"                               { fprintf(out, "RPARENT %s\n", yytext);    RETURN_TOKEN(RPARENT);    }
+"\["                               { fprintf(out, "LBRACK %s\n", yytext);     RETURN_TOKEN(LBRACK);     }
+"\]"                               { fprintf(out, "RBRACK %s\n", yytext);     RETURN_TOKEN(RBRACK);     }
+"\{"                               { fprintf(out, "LBRACE %s\n", yytext);     RETURN_TOKEN(LBRACE);     }
+"\}"                               { fprintf(out, "RBRACE %s\n", yytext);     RETURN_TOKEN(RBRACE);     }
 
 [ \t\n]                            {                                                                    }
-.                                  {                                         RETURN_TOKEN(ERROR);       }
+.                                  {                                          RETURN_TOKEN(ERROR);      }
 
 %%
-int main()
+void scan_string(const char *str, yyscan_t scanner)
 {
-    in = fopen("testfile.txt", "r");
-    out = fopen("output.txt", "w");
-    yyin = in;
-    yyout = out;
-
-    int token;
-    while ((token = yylex()) != 0);
-
-    return 0;
-}
-
-int yywrap() {
-    return 1;
+    yy_switch_to_buffer(yy_scan_string(str, scanner), scanner);
 }
