@@ -1,4 +1,10 @@
 %top{
+#include <string.h>
+#include <stdio.h>
+#include <vector>
+#include <unordered_map>
+using namespace std;
+
 #define YY_TYPEDEF_YY_SIZE_T
 typedef int yy_size_t;
 #define YY_USER_INIT                                         \
@@ -23,66 +29,125 @@ while (0);
 %option reentrant
 /* 支持位置跟踪 */
 %option bison-locations
-
 %{
-#include <string.h>
-#include <stdio.h>
 
 #ifndef register
 #define register 
 #endif // register
 
+extern vector<char *> all_outputs;
+
 #include "../yacc/dmx_yacc.hpp"
 
-#define RETURN_TOKEN(token) printf("%s ", yytext); return token;
+unordered_map<int, char *> token_map = {
+    {258, (char *)"IFTK "},                    // IFTK
+    {259, (char *)"ELSETK "},                  // ELSETK
+    {260, (char *)"WHILETK "},                 // WHILETK
+    {261, (char *)"CONSTTK "},                 // CONSTTK
+    {262, (char *)"GETINTTK "},                // GETINTTK
+    {263, (char *)"PRINTFTK "},                // PRINTFTK
+    {264, (char *)"BREAKTK  "},                 // BREAKTK
+    {265, (char *)"RETURNTK "},                // RETURNTK
+    {266, (char *)"CONTINUETK "},              // CONTINUETK
+    {267, (char *)"IDENFR "},                  // IDENFR
+    {268, (char *)"STRCON "},                  // STRCON
+    {269, (char *)"NOT "},                     // NOT
+    {270, (char *)"AND "},                     // AND
+    {271, (char *)"OR "},                      // OR
+    {272, (char *)"EQL "},                     // EQL
+    {273, (char *)"NEQ "},                     // NEQ
+    {274, (char *)"LEQ "},                     // LEQ
+    {275, (char *)"GEQ "},                     // GEQ
+    {276, (char *)"LSS "},                     // LSS
+    {277, (char *)"GRE "},                     // GRE
+    {278, (char *)"ASSIGN "},                  // ASSIGN
+    {279, (char *)"SEMICN "},                  // SEMICN
+    {280, (char *)"COMMA "},                   // COMMA
+    {281, (char *)"LPARENT "},                 // LPARENT
+    {282, (char *)"RPARENT "},                 // RPARENT
+    {283, (char *)"LBRACE "},                  // LBRACE
+    {284, (char *)"RBRACE "},                  // RBRACE
+    {285, (char *)"LBRACK "},                  // LBRACK
+    {286, (char *)"RBRACK "},                  // RBRACK
+    {287, (char *)"INTCON "},                  // INTCON
+    {288, (char *)"PLUS "},                    // PLUS
+    {289, (char *)"MINU "},                    // MINU
+    {290, (char *)"MULT "},                    // MULT
+    {291, (char *)"DIV "},                     // DIV
+    {292, (char *)"MOD "},                     // MOD
+    {293, (char *)"TYPETK "},                  // TYPETK
+    {294, (char *)"MAINTK "},                  // TYPETK
+    {295, (char *)"ERROR "}                    // ERROR
+};
+
+void output(int token, char *text) 
+{
+    char *temp = nullptr;
+
+    // TYPETK 的特殊判断
+    if(strcmp((char *)token_map[token], (char *)"TYPETK ") == 0)
+    {
+        temp = strcmp((char *)"int", text) == 0 ? strdup((char *)"INTTK ") : strdup((char *)"VOIDTK ");
+    }
+    else
+    {
+        temp = strdup((char *)token_map[token]); 
+    }
+    strcat(temp, text); 
+    all_outputs.push_back(temp); 
+    printf("%s\n", text); 
+}
+
+#define RETURN_TOKEN(token) return token;
 %}
 
 %%
-"while"                            { RETURN_TOKEN(WHILETK);    }
-"const"                            { RETURN_TOKEN(CONSTTK);    }
-"getint"                           { RETURN_TOKEN(GETINTTK);   }
-"printf"                           { RETURN_TOKEN(PRINTFTK);   }
-"break"                            { RETURN_TOKEN(BREAKTK);    }
-"return"                           { RETURN_TOKEN(RETURNTK);   }
-"continue"                         { RETURN_TOKEN(CONTINUETK); }
-"if"                               { RETURN_TOKEN(IFTK);       }
-"else"                             { RETURN_TOKEN(ELSETK);     }
-"void"                             { RETURN_TOKEN(TYPETK);     }
-"int"                              { RETURN_TOKEN(TYPETK);     }
+"while"                            { output(WHILETK, yytext);    RETURN_TOKEN(WHILETK);    }
+"const"                            { output(CONSTTK, yytext);    RETURN_TOKEN(CONSTTK);    }
+"getint"                           { output(GETINTTK, yytext);   RETURN_TOKEN(GETINTTK);   }
+"printf"                           { output(PRINTFTK, yytext);   RETURN_TOKEN(PRINTFTK);   }
+"break"                            { output(BREAKTK, yytext);    RETURN_TOKEN(BREAKTK);    }
+"return"                           { output(RETURNTK, yytext);   RETURN_TOKEN(RETURNTK);   }
+"continue"                         { output(CONTINUETK, yytext); RETURN_TOKEN(CONTINUETK); }
+"if"                               { output(IFTK, yytext);       RETURN_TOKEN(IFTK);       }
+"else"                             { output(ELSETK, yytext);     RETURN_TOKEN(ELSETK);     }
+"void"                             { output(TYPETK, yytext);     RETURN_TOKEN(TYPETK);     }
+"int"                              { output(TYPETK, yytext);     RETURN_TOKEN(TYPETK);     }
+"main"                             { output(MAINTK, yytext);     RETURN_TOKEN(MAINTK);     }    
 "/*"[^*]*"*"+([^*/][^*]*"*"+)*"/"  
 "//".*                             
 
-[a-zA-Z_][a-zA-Z0-9_]*             { RETURN_TOKEN(IDENFR);     }
-[0-9]+                             { RETURN_TOKEN(INTCON);     }
-\"([^\\\"]|\\.)*\"                 { RETURN_TOKEN(STRCON);     }
+[a-zA-Z_][a-zA-Z0-9_]*             { output(IDENFR, yytext);     RETURN_TOKEN(IDENFR);     }
+[0-9]+                             { output(INTCON, yytext);     RETURN_TOKEN(INTCON);     }
+\"([^\\\"]|\\.)*\"                 { output(STRCON, yytext);     RETURN_TOKEN(STRCON);     }
 
-"!"                                { RETURN_TOKEN(NOT);        }
-"*"                                { RETURN_TOKEN(MULT);       }
-"+"                                { RETURN_TOKEN(PLUS);       }
-"-"                                { RETURN_TOKEN(MINU);       }
-"/"                                { RETURN_TOKEN(DIV);        }
-"%"                                { RETURN_TOKEN(MOD);        }
-"&&"                               { RETURN_TOKEN(AND);        }
-"||"                               { RETURN_TOKEN(OR);         }
-"=="                               { RETURN_TOKEN(EQL);        }
-"!="                               { RETURN_TOKEN(NEQ);        }
-"<="                               { RETURN_TOKEN(LEQ);        }
-">="                               { RETURN_TOKEN(GEQ);        }
-"<"                                { RETURN_TOKEN(LSS);        }
-">"                                { RETURN_TOKEN(GRE);        }
+"!"                                { output(NOT, yytext);        RETURN_TOKEN(NOT);        }
+"*"                                { output(MULT, yytext);       RETURN_TOKEN(MULT);       }
+"+"                                { output(PLUS, yytext);       RETURN_TOKEN(PLUS);       }
+"-"                                { output(MINU, yytext);       RETURN_TOKEN(MINU);       }
+"/"                                { output(DIV, yytext);        RETURN_TOKEN(DIV);        }
+"%"                                { output(MOD, yytext);        RETURN_TOKEN(MOD);        }
+"&&"                               { output(AND, yytext);        RETURN_TOKEN(AND);        }
+"||"                               { output(OR, yytext);         RETURN_TOKEN(OR);         }
+"=="                               { output(EQL, yytext);        RETURN_TOKEN(EQL);        }
+"!="                               { output(NEQ, yytext);        RETURN_TOKEN(NEQ);        }
+"<="                               { output(LEQ, yytext);        RETURN_TOKEN(LEQ);        }
+">="                               { output(GEQ, yytext);        RETURN_TOKEN(GEQ);        }
+"<"                                { output(LSS, yytext);        RETURN_TOKEN(LSS);        }
+">"                                { output(GRE, yytext);        RETURN_TOKEN(GRE);        }
 
-"="                                { RETURN_TOKEN(ASSIGN);     }
-";"                                { RETURN_TOKEN(SEMICN);     }
-","                                { RETURN_TOKEN(COMMA);      } 
-"("                                { RETURN_TOKEN(LPARENT);    }
-")"                                { RETURN_TOKEN(RPARENT);    }
-"["                                { RETURN_TOKEN(LBRACK);     }
-"]"                                { RETURN_TOKEN(RBRACK);     }
-"{"                                { RETURN_TOKEN(LBRACE);     }
-"}"                                { RETURN_TOKEN(RBRACE);     }
+"="                                { output(ASSIGN, yytext);     RETURN_TOKEN(ASSIGN);     }
+";"                                { output(SEMICN, yytext);     RETURN_TOKEN(SEMICN);     }
+","                                { output(COMMA, yytext);      RETURN_TOKEN(COMMA);      } 
+"("                                { output(LPARENT, yytext);    RETURN_TOKEN(LPARENT);    }
+")"                                { output(RPARENT, yytext);    RETURN_TOKEN(RPARENT);    }
+"["                                { output(LBRACK, yytext);     RETURN_TOKEN(LBRACK);     }
+"]"                                { output(RBRACK, yytext);     RETURN_TOKEN(RBRACK);     }
+"{"                                { output(LBRACE, yytext);     RETURN_TOKEN(LBRACE);     }
+"}"                                { output(RBRACE, yytext);     RETURN_TOKEN(RBRACE);     }
 
 [\ \t\n\b\f]                       
-.                                  { RETURN_TOKEN(ERROR);      }
+.                                  {                     RETURN_TOKEN(ERROR);      }
 
 %%
 void scan_string(const char *str, yyscan_t scanner)

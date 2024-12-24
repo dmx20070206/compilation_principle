@@ -14,7 +14,7 @@ int main()
     string total;
     while (getline(inputFile, line))
         total += line + '\n';
-    SysY_parse(total.c_str());
+    SysY_parse(total.c_str(), "output.txt");
 
     inputFile.close();
     return 0;

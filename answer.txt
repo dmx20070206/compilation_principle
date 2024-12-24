@@ -18,7 +18,7 @@ SEMICN ;
 <Stmt>
 PRINTFTK printf
 LPARENT (
-STRCON "output is %d"
+STRCON "%d"
 COMMA ,
 IDENFR c
 <LVal>

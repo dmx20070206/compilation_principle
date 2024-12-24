@@ -90,14 +90,24 @@ extern int yydebug;
     DIV = 291,                     /* DIV  */
     MOD = 292,                     /* MOD  */
     TYPETK = 293,                  /* TYPETK  */
-    ERROR = 294                    /* ERROR  */
+    MAINTK = 294,                  /* MAINTK  */
+    ERROR = 295                    /* ERROR  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+union YYSTYPE
+{
+#line 54 "yacc/yacc.y"
+
+  char * string;
+
+#line 108 "yacc/dmx_yacc.hpp"
+
+};
+typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif
