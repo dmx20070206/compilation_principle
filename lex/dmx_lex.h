@@ -3,12 +3,6 @@
 #define yyIN_HEADER 1
 
 #line 6 "lex/dmx_lex.h"
-#include <string.h>
-#include <stdio.h>
-
-#include "yacc/dmx_yacc.hpp"
-
-// some define
 #define YY_TYPEDEF_YY_SIZE_T
 typedef int yy_size_t;
 #define YY_USER_INIT                                         \
@@ -22,11 +16,7 @@ do {                                                         \
 }                                                            \
 while (0);
 
-// file 
-FILE *out;
-FILE *in;
-
-#line 30 "lex/dmx_lex.h"
+#line 20 "lex/dmx_lex.h"
 
 #define  YY_INT_ALIGNED short int
 
@@ -540,9 +530,9 @@ extern int yylex \
 #undef yyTABLES_NAME
 #endif
 
-#line 129 "lex/lex.l"
+#line 87 "lex/lex.l"
 
 
-#line 547 "lex/dmx_lex.h"
+#line 537 "lex/dmx_lex.h"
 #undef yyIN_HEADER
 #endif /* yyHEADER_H */

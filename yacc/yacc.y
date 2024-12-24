@@ -4,16 +4,16 @@
 #include <string.h>
 #include <algorithm>
 
-#include "yacc/dmx_yacc.hpp"
-#include "lex/dmx_lex.h"
+#include "../yacc/dmx_yacc.hpp"
+#include "../lex/dmx_lex.h"
 
 using namespace std;
 
 int yyerror(YYLTYPE *llocp, const char *parse_string, yyscan_t scanner, const char *msg)
 {
-  return 0;
+    fprintf(stderr, "Syntax error: %s\n", msg);
+    return 0;
 }
-
 %}
 
 %define api.pure full
@@ -25,21 +25,16 @@ int yyerror(YYLTYPE *llocp, const char *parse_string, yyscan_t scanner, const ch
 %parse-param { const char * parse_string }
 %parse-param { void * scanner }
 
-%left  PLUS MINU
-%left  MULT DIV MOD
-%left  ELSETK
-       INTTK
+%precedence IFTK
+%precedence ELSETK
 
-%token MAINTK     
-       WHILETK    
+%token WHILETK    
        CONSTTK    
        GETINTTK   
        PRINTFTK   
        BREAKTK    
        RETURNTK   
        CONTINUETK 
-       IFTK       
-       VOIDTK     
        IDENFR     
        STRCON     
        NOT        
@@ -61,63 +56,60 @@ int yyerror(YYLTYPE *llocp, const char *parse_string, yyscan_t scanner, const ch
        LBRACK   
        RBRACK
        INTCON     
+       PLUS 
+       MINU
+       MULT
+       DIV 
+       MOD
+       TYPETK
+       ERROR
 %%
 
 /* 编译单元，语法分析的起点 */
 CompUnit:
-    Decls FuncDefs MainFuncDef 
+    CompUnitList
     {
-
+        printf("<CompUnit>\n");
     }
     ;
 
-/* 一个函数声明 */
+CompUnitList: 
+    CompUnitItem 
+    {
+
+    }
+    | CompUnitItem CompUnitList
+    {
+
+    }
+
+CompUnitItem: 
+    Decl
+    {
+
+    }
+    | FuncDef 
+    {
+
+    }
+
+/* 一个变量声明 */
 Decl:
     ConstDecl
     {
-
+        printf("<ConstDecl>\n");
     }
     | VarDecl
     {
-
-    }
-    ;
-
-/* 若干个函数声明 */
-Decls:
-    {
-
-    }
-    | Decl Decls
-    {
-
-    }
-    ;
-
-/* 若干个函数定义 */
-FuncDefs:
-    {
-
-    }
-    | FuncDef FuncDefs
-    {
-
-    }
-    ;
-
-/* 主函数定义 */
-MainFuncDef:
-    INTTK MAINTK LBRACE RBRACE Block
-    {
-
+        printf("<VarDecl>\n");
     }
     ;
 
 /* 常量声明 */
 ConstDecl:
-    CONSTTK BType ConstDef ConstDefs SEMICN
+    CONSTTK TYPETK ConstDef ConstDefs SEMICN
     {
-
+        printf("<ConstDecl>\n");
     }
     ;
 
@@ -132,19 +124,11 @@ ConstDefs:
     }
     ;
 
-/* 基本类型 */
-BType:
-    INTTK
-    {
-
-    }
-    ;
-
 /* 一个常量定义 */
 ConstDef:
     IDENFR L_ConstExps_R ASSIGN ConstInitVal
     {
-
+        printf("<ConstDef>\n");
     }
     ;
 
@@ -153,7 +137,7 @@ L_ConstExps_R:
     {
 
     }
-    | LBRACK ConstExp RBRACK L_ConstExps_R
+    | L_ConstExps_R LBRACK ConstExp RBRACK
     {
 
     }
@@ -188,7 +172,7 @@ ConstInitVals:
 
 /* 一个变量声明 */
 VarDecl:
-    BType VarDef VarDefs SEMICN
+    TYPETK VarDef VarDefs SEMICN
     {
 
     }
@@ -244,24 +228,13 @@ InitVals:
 
 /* 一个函数定义 */
 FuncDef:
-    FuncType IDENFR LBRACE RBRACE Block
+    TYPETK IDENFR LPARENT RPARENT Block
     {
-
+        printf("<FuncDef>\n");
     }
-    | FuncType IDENFR LBRACE FuncFParam FuncFParams RBRACE Block
+    | TYPETK IDENFR LPARENT FuncFParam FuncFParams RPARENT Block
     {
-
-    }
-    ;
-
-FuncType:
-    VOIDTK
-    {
-
-    }
-    | INTTK
-    {
-
+        printf("<FuncDef>\n");
     }
     ;
 
@@ -276,11 +249,11 @@ FuncFParams:
     ;
 
 FuncFParam:
-    BType IDENFR
+    TYPETK IDENFR
     {
 
     }
-    | BType IDENFR LBRACK RBRACK L_ConstExps_R
+    | TYPETK IDENFR LBRACK RBRACK L_ConstExps_R
     {
 
     }
@@ -319,11 +292,11 @@ Stmt:
     {
 
     }
-    | Exp SEMICN
+    | SEMICN
     {
 
     }
-    | SEMICN
+    | Exp SEMICN
     {
 
     }
@@ -335,7 +308,7 @@ Stmt:
     {
 
     }
-    | IFTK LPARENT Cond RPARENT Stmt
+    | IFTK LPARENT Cond RPARENT Stmt %prec IFTK
     {
 
     }
@@ -379,6 +352,10 @@ Exps:
     }
     ;
 
+Exp:
+    AddExp
+    ;
+
 Cond:
     LOrExp
     {
@@ -397,7 +374,7 @@ L_Exps_R:
     {
 
     }
-    | LBRACK Exp RBRACK L_Exps_R
+    | L_Exps_R LBRACK Exp RBRACK 
     {
 
     }
@@ -439,6 +416,9 @@ UnaryExp:
 
     }
     | UnaryOp UnaryExp
+    {
+
+    }
     ;
 
 UnaryOp:
@@ -503,10 +483,6 @@ LOrExp:
 ConstExp:
     AddExp
     ;
-
-Exp:
-    AddExp
-    ;
 %%
 
 int yywrap(){
@@ -516,10 +492,18 @@ extern void scan_string(const char *str, yyscan_t scanner);
 
 int SysY_parse(const char* parse_string)
 {
+    printf("%s\n", "--------- code ---------");
+    printf("%s", parse_string);
+
+    printf("%s\n", "--------- result ---------");
+
     yyscan_t scanner;
     yylex_init(&scanner);
+
     scan_string(parse_string, scanner);
+
     int result = yyparse(parse_string, scanner);
-    yylex_destroy(scanner);
+
+    yylex_destroy(scanner); 
     return result;
 }

@@ -13,7 +13,7 @@ int main()
     string line;
     string total;
     while (getline(inputFile, line))
-        total += line;
+        total += line + '\n';
     SysY_parse(total.c_str());
 
     inputFile.close();
