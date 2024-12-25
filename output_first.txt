@@ -1,52 +1,15 @@
 INTTK int
-MAINTK main
+IDENFR func
 LPARENT (
-RPARENT )
-LBRACE {
 INTTK int
-IDENFR c
-SEMICN ;
-<VarDef>
-DMX20070206
-<VarDecl>
-IDENFR c
-ASSIGN =
-<LVal>
-GETINTTK getint
-LPARENT (
+IDENFR i
 RPARENT )
-SEMICN ;
-DMX20070206
-<Stmt>
-PRINTFTK printf
-LPARENT (
-STRCON "%d"
-COMMA ,
-IDENFR c
-RPARENT )
-<LVal>
-<PrimaryExp>
-<UnaryExp>
-<MulExp>
-<AddExp>
-<Exp>
-SEMICN ;
-DMX20070206
-<Stmt>
-RETURNTK return
-IDENFR c
-SEMICN ;
-<LVal>
-<PrimaryExp>
-<UnaryExp>
-<MulExp>
-<AddExp>
-<Exp>
-DMX20070206
-<Stmt>
+<FuncFParam>
+<FuncFParams>
+LBRACE {
 RBRACE }
 DMX20070206
 <Block>
 DMX20070206
-<MainFuncDef>
+<FuncDef>
 <CompUnit>

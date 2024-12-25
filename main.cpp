@@ -43,7 +43,7 @@ int main()
     // 2 INTTK + IDENFR + LPARENT 时，添加 <FuncType>
     for (int i = 2; i < lines.size(); i++)
     {
-        if (lines[i].find("LPARENT") != string::npos && lines[i - 1].find("IDENFR") != string::npos && lines[i - 2].find("INTTK") != string::npos)
+        if (lines[i].find("LPARENT") != string::npos && lines[i - 1].find("IDENFR") != string::npos && (lines[i - 2].find("INTTK") != string::npos || lines[i - 2].find("VOIDTK") != string::npos))
         {
             string str = "<FuncType>";
             lines.insert(lines.begin() + i - 1, str);

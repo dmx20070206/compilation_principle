@@ -266,6 +266,12 @@ FuncDef:
     ;
 
 FuncFParams:
+    {
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<FuncFParams>" << "\n";
+        printf("%s\n", "<FuncFParams>");
+    }
     | COMMA FuncFParam FuncFParams
     {
         if (yychar == -2)

@@ -40,7 +40,7 @@ unordered_map<int, char *> token_map = {
     {261, (char *)"CONSTTK "},                 // CONSTTK
     {262, (char *)"GETINTTK "},                // GETINTTK
     {263, (char *)"PRINTFTK "},                // PRINTFTK
-    {264, (char *)"BREAKTK  "},                // BREAKTK
+    {264, (char *)"BREAKTK "},                 // BREAKTK
     {265, (char *)"RETURNTK "},                // RETURNTK
     {266, (char *)"CONTINUETK "},              // CONTINUETK
     {267, (char *)"IDENFR "},                  // IDENFR
