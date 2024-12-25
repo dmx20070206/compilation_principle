@@ -90,8 +90,7 @@ void output(int token, char *text)
         temp = strdup((char *)token_map[token]); 
     }
     output_file << temp << text << "\n";
-    strcat(temp, text); 
-    printf("%s\n", temp);
+    printf("%s%s\n", temp, text);
     delete[] temp;
 }
 

@@ -6,11 +6,6 @@ vector<string> lines;
 int main()
 {
     ifstream inputFile("testfile.txt");
-    if (!inputFile)
-    {
-        printf("failed to read file\n");
-        return 1;
-    }
 
     string line;
     string total;
@@ -48,6 +43,15 @@ int main()
             string str = "<FuncType>";
             lines.insert(lines.begin() + i - 1, str);
             i++;
+        }
+    }
+
+    for (int i = 1; i < lines.size(); i++)
+    {
+        if (lines[i] == "<FuncFParams>" && lines[i - 1] == "<FuncFParams>")
+        {
+            lines.erase(lines.begin() + i - 1);
+            i--;
         }
     }
 

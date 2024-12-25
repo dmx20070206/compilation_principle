@@ -1,15 +1,321 @@
 INTTK int
-IDENFR func
+MAINTK main
 LPARENT (
-INTTK int
-IDENFR i
 RPARENT )
-<FuncFParam>
-<FuncFParams>
 LBRACE {
+PRINTFTK printf
+LPARENT (
+STRCON "%d: between minNumber and maxNumber\n"
+COMMA ,
+IDENFR number
+RPARENT )
+<LVal>
+<PrimaryExp>
+<UnaryExp>
+<MulExp>
+<AddExp>
+<Exp>
+SEMICN ;
+DMX20070206
+<Stmt>
+INTTK int
+IDENFR times
+COMMA ,
+<VarDef>
+IDENFR i
+SEMICN ;
+<VarDef>
+DMX20070206
+<VarDecl>
+IDENFR times
+ASSIGN =
+<LVal>
+GETINTTK getint
+LPARENT (
+RPARENT )
+SEMICN ;
+DMX20070206
+<Stmt>
+IDENFR i
+ASSIGN =
+<LVal>
+INTCON 0
+DMX20070206
+<Number>
+DMX20070206
+<PrimaryExp>
+DMX20070206
+<UnaryExp>
+DMX20070206
+<MulExp>
+SEMICN ;
+<AddExp>
+<Exp>
+DMX20070206
+<Stmt>
+WHILETK while
+LPARENT (
+IDENFR i
+LSS <
+<LVal>
+<PrimaryExp>
+<UnaryExp>
+<MulExp>
+<AddExp>
+<RelExp>
+IDENFR times
+RPARENT )
+<LVal>
+<PrimaryExp>
+<UnaryExp>
+<MulExp>
+<AddExp>
+<RelExp>
+<EqExp>
+<LAndExp>
+<LOrExp>
+<Cond>
+LBRACE {
+IDENFR i
+ASSIGN =
+<LVal>
+IDENFR i
+PLUS +
+<LVal>
+<PrimaryExp>
+<UnaryExp>
+<MulExp>
+<AddExp>
+INTCON 1
+DMX20070206
+<Number>
+DMX20070206
+<PrimaryExp>
+DMX20070206
+<UnaryExp>
+DMX20070206
+<MulExp>
+SEMICN ;
+<AddExp>
+<Exp>
+DMX20070206
+<Stmt>
+INTTK int
+IDENFR number
+SEMICN ;
+<VarDef>
+DMX20070206
+<VarDecl>
+IDENFR number
+ASSIGN =
+<LVal>
+GETINTTK getint
+LPARENT (
+RPARENT )
+SEMICN ;
+DMX20070206
+<Stmt>
+IFTK if
+LPARENT (
+IDENFR number
+LSS <
+<LVal>
+<PrimaryExp>
+<UnaryExp>
+<MulExp>
+<AddExp>
+<RelExp>
+IDENFR minNumber
+RPARENT )
+<LVal>
+<PrimaryExp>
+<UnaryExp>
+<MulExp>
+<AddExp>
+<RelExp>
+<EqExp>
+<LAndExp>
+<LOrExp>
+<Cond>
+LBRACE {
+PRINTFTK printf
+LPARENT (
+STRCON "%d: less than minNumber\n\n"
+COMMA ,
+IDENFR number
+RPARENT )
+<LVal>
+<PrimaryExp>
+<UnaryExp>
+<MulExp>
+<AddExp>
+<Exp>
+SEMICN ;
+DMX20070206
+<Stmt>
+CONTINUETK continue
+SEMICN ;
+DMX20070206
+<Stmt>
 RBRACE }
 DMX20070206
 <Block>
 DMX20070206
-<FuncDef>
+<Stmt>
+IFTK if
+<Stmt>
+LPARENT (
+IDENFR number
+GRE >
+<LVal>
+<PrimaryExp>
+<UnaryExp>
+<MulExp>
+<AddExp>
+<RelExp>
+IDENFR maxNumber
+RPARENT )
+<LVal>
+<PrimaryExp>
+<UnaryExp>
+<MulExp>
+<AddExp>
+<RelExp>
+<EqExp>
+<LAndExp>
+<LOrExp>
+<Cond>
+LBRACE {
+PRINTFTK printf
+LPARENT (
+STRCON "%d: greater than maxNumber\n\n"
+COMMA ,
+IDENFR number
+RPARENT )
+<LVal>
+<PrimaryExp>
+<UnaryExp>
+<MulExp>
+<AddExp>
+<Exp>
+SEMICN ;
+DMX20070206
+<Stmt>
+CONTINUETK continue
+SEMICN ;
+DMX20070206
+<Stmt>
+RBRACE }
+DMX20070206
+<Block>
+DMX20070206
+<Stmt>
+IFTK if
+<Stmt>
+LPARENT (
+IDENFR number
+GEQ >=
+<LVal>
+<PrimaryExp>
+<UnaryExp>
+<MulExp>
+<AddExp>
+<RelExp>
+IDENFR minNumber
+RPARENT )
+<LVal>
+<PrimaryExp>
+<UnaryExp>
+<MulExp>
+<AddExp>
+<RelExp>
+<EqExp>
+<LAndExp>
+<LOrExp>
+<Cond>
+LBRACE {
+IFTK if
+LPARENT (
+IDENFR number
+LEQ <=
+<LVal>
+<PrimaryExp>
+<UnaryExp>
+<MulExp>
+<AddExp>
+<RelExp>
+IDENFR maxNumber
+RPARENT )
+<LVal>
+<PrimaryExp>
+<UnaryExp>
+<MulExp>
+<AddExp>
+<RelExp>
+<EqExp>
+<LAndExp>
+<LOrExp>
+<Cond>
+LBRACE {
+PRINTFTK printf
+LPARENT (
+STRCON "%d: between minNumber and maxNumber\n"
+COMMA ,
+IDENFR number
+RPARENT )
+<LVal>
+<PrimaryExp>
+<UnaryExp>
+<MulExp>
+<AddExp>
+<Exp>
+SEMICN ;
+DMX20070206
+<Stmt>
+RBRACE }
+DMX20070206
+<Block>
+DMX20070206
+<Stmt>
+RBRACE }
+<Stmt>
+DMX20070206
+<Block>
+DMX20070206
+<Stmt>
+PRINTFTK printf
+<Stmt>
+LPARENT (
+STRCON "\n"
+RPARENT )
+SEMICN ;
+DMX20070206
+<Stmt>
+RBRACE }
+DMX20070206
+<Block>
+DMX20070206
+<Stmt>
+DMX20070206
+<Stmt>
+RETURNTK return
+INTCON 0
+DMX20070206
+<Number>
+DMX20070206
+<PrimaryExp>
+DMX20070206
+<UnaryExp>
+DMX20070206
+<MulExp>
+SEMICN ;
+<AddExp>
+<Exp>
+DMX20070206
+<Stmt>
+RBRACE }
+DMX20070206
+<Block>
+DMX20070206
+<MainFuncDef>
 <CompUnit>
