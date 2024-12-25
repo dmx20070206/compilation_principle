@@ -10,9 +10,12 @@
 
 using namespace std;
 
+FILE *output_yacc = fopen("output_first.txt", "w");
+extern unordered_map<int, char *> token_map;
+
 int yyerror(YYLTYPE *llocp, const char *parse_string, yyscan_t scanner, const char *msg)
 {
-    fprintf(stderr, "Syntax error: %s\n", msg);
+    fprintf(output_yacc, "Syntax error: %s\n", msg);
     return 0;
 }
 
@@ -25,35 +28,8 @@ char *token_name(const char *parse_string, YYLTYPE *llocp)
     return result;
 }
 
-char *output_format(char *name, char* parse_string)
-{
-    int len = 0;
-    for(int i = strlen(parse_string) - 1; i >= 0; i--)
-    {
-        if(parse_string[i] == ' ' || parse_string[i] == '\n')
-            break;
-        len++;
-    }
-
-    char *temp = new char[len + 1];
-    strncpy(temp, parse_string + strlen(parse_string) - len, len);
-
-    char *result = new char[strlen(name) + strlen(temp) + 1];
-    strcpy(result, name);
-    strcat(result, temp);
-
-    // printf("dmx %d :", strlen(parse_string));
-    return result;
-}
-
-FILE *output_yacc;
-
-vector<char *> all_outputs;
+int cur_token = -1;
 %}
-
-%union {
-  char * string;
-}
 
 %define api.pure full
 %define parse.error verbose
@@ -109,8 +85,8 @@ vector<char *> all_outputs;
 CompUnit:
     CompUnitList
     {
-        char *result = output_format((char *)"<CompUnit>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<CompUnit>");
         printf("%s\n", "<CompUnit>");
     }
     ;
@@ -135,8 +111,8 @@ Decl:
 ConstDecl:
     CONSTTK TYPETK ConstDef ConstDefs SEMICN
     {
-        char *result = output_format((char *)"<ConstDecl>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<ConstDecl>");
         printf("%s\n", "<ConstDecl>");
     }
     ;
@@ -150,8 +126,8 @@ ConstDefs:
 ConstDef:
     IDENFR L_ConstExps_R ASSIGN ConstInitVal
     {
-        char *result = output_format((char *)"<ConstDef>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<ConstDef>");
         printf("%s\n", "<ConstDef>");
     }
     ;
@@ -164,8 +140,23 @@ L_ConstExps_R:
 /* 一个常量初值 */
 ConstInitVal:
     ConstExp
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<ConstInitVal>");
+        printf("%s\n", "<ConstInitVal>");
+    }
     | LBRACE RBRACE
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<ConstInitVal>");
+        printf("%s\n", "<ConstInitVal>");
+    }
     | LBRACE ConstInitVal ConstInitVals RBRACE
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<ConstInitVal>");
+        printf("%s\n", "<ConstInitVal>");
+    }
     ;
 
 /* 若干个常量初值 */
@@ -177,8 +168,8 @@ ConstInitVals:
 VarDecl:
     TYPETK VarDef VarDefs SEMICN
     {
-        char *result = output_format((char *)"<VarDecl>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<VarDecl>");
         printf("%s\n", "<VarDecl>");
     }
     ;
@@ -192,14 +183,14 @@ VarDefs:
 VarDef:
     IDENFR L_ConstExps_R
     {
-        char *result = output_format((char *)"<VarDef>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<VarDef>");
         printf("%s\n", "<VarDef>");
     }
     | IDENFR L_ConstExps_R ASSIGN InitVal
     {
-        char *result = output_format((char *)"<VarDef>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<VarDef>");
         printf("%s\n", "<VarDef>");
     }
     ;
@@ -207,20 +198,20 @@ VarDef:
 InitVal:
     Exp
     {
-        char *result = output_format((char *)"<InitVal>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<InitVal>");
         printf("%s\n", "<InitVal>");
     }
     | LBRACE RBRACE
     {
-        char *result = output_format((char *)"<InitVal>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<InitVal>");
         printf("%s\n", "<InitVal>");
     }
     | LBRACE InitVal InitVals RBRACE
     {
-        char *result = output_format((char *)"<InitVal>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<InitVal>");
         printf("%s\n", "<InitVal>");
     }
     ;
@@ -233,44 +224,59 @@ InitVals:
 FuncDef:
     TYPETK IDENFR LPARENT RPARENT Block
     {
-        char *result = output_format((char *)"<FuncDef>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<FuncDef>");
         printf("%s\n", "<FuncDef>");
     }
     | TYPETK IDENFR LPARENT FuncFParam FuncFParams RPARENT Block
     {
-        char *result = output_format((char *)"<FuncDef>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<FuncDef>");
         printf("%s\n", "<FuncDef>");
     }
     | TYPETK MAINTK LPARENT RPARENT Block
     {
-        char *result = output_format((char *)"<MainFuncDef>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<MainFuncDef>");
         printf("%s\n", "<MainFuncDef>");
     }
     | TYPETK MAINTK LPARENT FuncFParam FuncFParams RPARENT Block
     {
-        char *result = output_format((char *)"<MainFuncDef>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<MainFuncDef>");
         printf("%s\n", "<MainFuncDef>");
     }
     ;
 
 FuncFParams:
     | COMMA FuncFParam FuncFParams
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<FuncFParams>");
+        printf("%s\n", "<FuncFParams>");
+    }
     ;
 
 FuncFParam:
     TYPETK IDENFR
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<FuncFParam>");
+        printf("%s\n", "<FuncFParam>");
+    }
     | TYPETK IDENFR LBRACK RBRACK L_ConstExps_R
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<FuncFParam>");
+        printf("%s\n", "<FuncFParam>");
+    }
     ;
 
 Block:
     LBRACE BlockItems RBRACE
     {
-        char *result = output_format((char *)"<Block>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<Block>");
         printf("%s\n", "<Block>");
     }
     ;
@@ -287,80 +293,80 @@ BlockItems:
 Stmt:
     LVal ASSIGN Exp SEMICN
     {
-        char *result = output_format((char *)"<Stmt>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<Stmt>");
         printf("%s\n", "<Stmt>");
     }
     | SEMICN
     {
-        char *result = output_format((char *)"<Stmt>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<Stmt>");
         printf("%s\n", "<Stmt>");
     }
     | Exp SEMICN
     {
-        char *result = output_format((char *)"<Stmt>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<Stmt>");
         printf("%s\n", "<Stmt>");
     }
     | Block
     {
-        char *result = output_format((char *)"<Stmt>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<Stmt>");
         printf("%s\n", "<Stmt>");
     }
     | IFTK LPARENT Cond RPARENT Stmt ELSETK Stmt
     {
-        char *result = output_format((char *)"<Stmt>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<Stmt>");
         printf("%s\n", "<Stmt>");
     }
     | IFTK LPARENT Cond RPARENT Stmt %prec IFTK
     {
-        char *result = output_format((char *)"<Stmt>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<Stmt>");
         printf("%s\n", "<Stmt>");
     }
     | WHILETK LPARENT Cond RPARENT Stmt
     {
-        char *result = output_format((char *)"<Stmt>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<Stmt>");
         printf("%s\n", "<Stmt>");
     }
     | BREAKTK SEMICN
     {
-        char *result = output_format((char *)"<Stmt>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<Stmt>");
         printf("%s\n", "<Stmt>");
     }
     | CONTINUETK SEMICN
     {
-        char *result = output_format((char *)"<Stmt>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<Stmt>");
         printf("%s\n", "<Stmt>");
     }
     | RETURNTK SEMICN
     {
-        char *result = output_format((char *)"<Stmt>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<Stmt>");
         printf("%s\n", "<Stmt>");
     }
     | RETURNTK Exp SEMICN
     {
-        char *result = output_format((char *)"<Stmt>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<Stmt>");
         printf("%s\n", "<Stmt>");
     }
     | LVal ASSIGN GETINTTK LPARENT RPARENT SEMICN
     {
-        char *result = output_format((char *)"<Stmt>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<Stmt>");
         printf("%s\n", "<Stmt>");
     }
     | PRINTFTK LPARENT STRCON Exps RPARENT SEMICN
     {
-        char *result = output_format((char *)"<Stmt>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<Stmt>");
         printf("%s\n", "<Stmt>");
     }
     ;
@@ -372,21 +378,26 @@ Exps:
 Exp:
     AddExp
     {
-        char *result = output_format((char *)"<Exp>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<Exp>");
         printf("%s\n", "<Exp>");
     }
     ;
 
 Cond:
     LOrExp
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<Cond>");
+        printf("%s\n", "<Cond>");
+    }
     ;
 
 LVal:
     IDENFR L_Exps_R
     {
-        char *result = output_format((char *)"<LVal>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<LVal>");
         printf("%s\n", "<LVal>");
     }
     ;
@@ -398,87 +409,112 @@ L_Exps_R:
 PrimaryExp:
     LPARENT Exp RPARENT
     {
-        char *result = output_format((char *)"<PrimaryExp>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<PrimaryExp>");
         printf("%s\n", "<PrimaryExp>");
     }
     | LVal
     {
-        char *result = output_format((char *)"<PrimaryExp>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<PrimaryExp>");
         printf("%s\n", "<PrimaryExp>");
     }
     | Number
     {
-        char *result = output_format((char *)"<PrimaryExp>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<PrimaryExp>");
         printf("%s\n", "<PrimaryExp>");
     }
     ;
 
 Number:
     INTCON
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<Number>");
+        printf("%s\n", "<Number>");
+    }
     ;
 
 UnaryExp:
     PrimaryExp
     {
-        char *result = output_format((char *)"<UnaryExp>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<UnaryExp>");
         printf("%s\n", "<UnaryExp>");
     }
     | IDENFR LPARENT RPARENT
     {
-        char *result = output_format((char *)"<UnaryExp>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<UnaryExp>");
         printf("%s\n", "<UnaryExp>");
     }
     | IDENFR LPARENT FuncRParams RPARENT
     {
-        char *result = output_format((char *)"<UnaryExp>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<UnaryExp>");
         printf("%s\n", "<UnaryExp>");
     }
     | UnaryOp UnaryExp
     {
-        char *result = output_format((char *)"<UnaryExp>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<UnaryExp>");
         printf("%s\n", "<UnaryExp>");
     }
 
 UnaryOp:
     PLUS
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<UnaryOp>");
+        printf("%s\n", "<UnaryOp>");
+    }
     | MINU
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<UnaryOp>");
+        printf("%s\n", "<UnaryOp>");
+    }
     | NOT
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<UnaryOp>");
+        printf("%s\n", "<UnaryOp>");
+    }
     ;
 
 FuncRParams:
     Exp Exps
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<FuncRParams>");
+        printf("%s\n", "<FuncRParams>");
+    }
     ;
 
 MulExp:
     UnaryExp
     {
-        char *result = output_format((char *)"<MulExp>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<MulExp>");
         printf("%s\n", "<MulExp>");
     }
     | MulExp MULT UnaryExp
     {
-        char *result = output_format((char *)"<MulExp>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<MulExp>");
         printf("%s\n", "<MulExp>");
     }
     | MulExp DIV UnaryExp
     {
-        char *result = output_format((char *)"<MulExp>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<MulExp>");
         printf("%s\n", "<MulExp>");
     }
     | MulExp MOD UnaryExp
     {
-        char *result = output_format((char *)"<MulExp>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<MulExp>");
         printf("%s\n", "<MulExp>");
     }
     ;
@@ -486,50 +522,115 @@ MulExp:
 AddExp:
     MulExp
     {
-        char *result = output_format((char *)"<AddExp>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<AddExp>");
         printf("%s\n", "<AddExp>");
     }
     | AddExp PLUS MulExp
     {
-        char *result = output_format((char *)"<AddExp>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<AddExp>");
         printf("%s\n", "<AddExp>");
     }
     | AddExp MINU MulExp
     {
-        char *result = output_format((char *)"<AddExp>", token_name(parse_string, &@$));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<AddExp>");
         printf("%s\n", "<AddExp>");
     }
     ;
 
 RelExp:
     AddExp
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<RelExp>");
+        printf("%s\n", "<RelExp>");
+    }
     | RelExp LSS AddExp
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<RelExp>");
+        printf("%s\n", "<RelExp>");
+    }
     | RelExp GRE AddExp
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<RelExp>");
+        printf("%s\n", "<RelExp>");
+    }
     | RelExp LEQ AddExp
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<RelExp>");
+        printf("%s\n", "<RelExp>");
+    }
     | RelExp GEQ AddExp
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<RelExp>");
+        printf("%s\n", "<RelExp>");
+    }
     ;
 
 EqExp:
     RelExp
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<EqExp>");
+        printf("%s\n", "<EqExp>");
+    }
     | EqExp EQL RelExp
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<EqExp>");
+        printf("%s\n", "<EqExp>");
+    }
     | EqExp NEQ RelExp
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<EqExp>");
+        printf("%s\n", "<EqExp>");
+    }
     ;
 
 LAndExp:
     EqExp
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<LAndExp>");
+        printf("%s\n", "<LAndExp>");
+    }
     | LAndExp AND EqExp
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<LAndExp>");
+        printf("%s\n", "<LAndExp>");
+    }
     ;
 
 LOrExp:
     LAndExp
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<LOrExp>");
+        printf("%s\n", "<LOrExp>");
+    }
     | LOrExp OR LAndExp
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<LOrExp>");
+        printf("%s\n", "<LOrExp>");
+    }
     ;
 
 ConstExp:
     AddExp
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<ConstExp>");
+        printf("%s\n", "<ConstExp>");
+    }
     ;
 %%
 
@@ -555,97 +656,6 @@ int SysY_parse(const char* parse_string, const char* path)
 
     yylex_destroy(scanner); 
 
-    // 将输出的结果保留，准备进行下一步处理
-    printf("%s\n", "--------- test ---------");
-    for(size_t i = 0; i < all_outputs.size(); i++)
-    {
-        printf("%s\n", all_outputs[i]);
-    }
-
-    // yacc 是 LALR(1) 机制，会提前阅读下一个 token，需要进行前移处理
-    for(int i = 0; i < all_outputs.size(); i++)
-    {
-        // 如果是词法输出，跳过
-        if(all_outputs[i][0] != '<' || i == 0)
-            continue;
-
-        // 判断是否需要前移
-        char *first = all_outputs[i];
-        int num = 0;
-        while(*first != '>' && *first != '\0')
-        {
-            first++;
-            num++;
-        }
-        
-        // 排除 < 打头的 token
-        if(*first == '\0')
-            continue;
-        
-        // 找到上一个语法输出
-        int pos = 1;
-        while(i - pos > 0 && all_outputs[i - pos][0] == '<')
-            pos++;
-        
-        // 非法
-        if(pos == i)
-            continue;
-
-        first++;
-        char *second = all_outputs[i - pos] + strlen(all_outputs[i - pos]) - 1;
-
-        // 词法分析也需要筛选出最后一个单词
-        while(*second != ' ' && second >= all_outputs[i - pos])
-            second--;
-        second++;
-
-        // 判断 first =? *second
-        int len1 = strlen(first);
-        int len2 = strlen(second);
-
-        if(len1 < len2)
-        {
-            // 前移操作
-            swap(all_outputs[i], all_outputs[i - pos]);
-            // 删除无用信息
-            all_outputs[i - pos][num + 1] = '\0';
-            continue;
-        }
-
-        while(len2 >= 0)
-        {
-            if(first[len1] != second[len2])
-                break;
-            len1--;
-            len2--;
-        }
-
-        if(len2 >= 0)
-        {
-            // 前移操作
-            swap(all_outputs[i], all_outputs[i - 1]);
-            // 删除无用信息
-            all_outputs[i - pos][num + 1] = '\0';
-            continue;
-        }
-        
-        // 删除无用信息
-        all_outputs[i][num + 1] = '\0';
-    }
-
-    // 最终的输出
-    printf("%s\n", "--------- final answer ---------");
-    for(size_t i = 0; i < all_outputs.size(); i++)
-    {
-        printf("%s\n", all_outputs[i]);
-    }
-
-    // 写入 output.txt
-    output_yacc = fopen(path, "w");
-    for(size_t i = 0; i < all_outputs.size(); i++)
-    {
-        fprintf(output_yacc, "%s\n", all_outputs[i]);
-    }
-
+    fclose(output_yacc);
     return result;
 }

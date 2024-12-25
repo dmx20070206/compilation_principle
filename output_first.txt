@@ -1,12 +1,11 @@
 INTTK int
-<FuncType>
 IDENFR func
 LPARENT (
 RPARENT )
 LBRACE {
 <Block>
-RBRACE }
 <FuncDef>
+DMXRBRACE }
 INTTK int
 MAINTK main
 LPARENT (
@@ -15,16 +14,16 @@ LBRACE {
 INTTK int
 IDENFR c
 <VarDef>
-SEMICN ;
 <VarDecl>
+DMXSEMICN ;
 IDENFR c
 <LVal>
 ASSIGN =
 GETINTTK getint
 LPARENT (
 RPARENT )
-SEMICN ;
 <Stmt>
+DMXSEMICN ;
 PRINTFTK printf
 LPARENT (
 STRCON "%d"
@@ -37,8 +36,8 @@ IDENFR c
 <AddExp>
 <Exp>
 RPARENT )
-SEMICN ;
 <Stmt>
+DMXSEMICN ;
 RETURNTK return
 IDENFR c
 <LVal>
@@ -47,9 +46,8 @@ IDENFR c
 <MulExp>
 <AddExp>
 <Exp>
-SEMICN ;
 <Stmt>
-RBRACE }
+DMXSEMICN ;
 <Block>
 <MainFuncDef>
 <CompUnit>

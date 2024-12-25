@@ -80,9 +80,12 @@
 
 using namespace std;
 
+FILE *output_yacc = fopen("output_first.txt", "w");
+extern unordered_map<int, char *> token_map;
+
 int yyerror(YYLTYPE *llocp, const char *parse_string, yyscan_t scanner, const char *msg)
 {
-    fprintf(stderr, "Syntax error: %s\n", msg);
+    fprintf(output_yacc, "Syntax error: %s\n", msg);
     return 0;
 }
 
@@ -95,32 +98,9 @@ char *token_name(const char *parse_string, YYLTYPE *llocp)
     return result;
 }
 
-char *output_format(char *name, char* parse_string)
-{
-    int len = 0;
-    for(int i = strlen(parse_string) - 1; i >= 0; i--)
-    {
-        if(parse_string[i] == ' ' || parse_string[i] == '\n')
-            break;
-        len++;
-    }
+int cur_token = -1;
 
-    char *temp = new char[len + 1];
-    strncpy(temp, parse_string + strlen(parse_string) - len, len);
-
-    char *result = new char[strlen(name) + strlen(temp) + 1];
-    strcpy(result, name);
-    strcat(result, temp);
-
-    // printf("dmx %d :", strlen(parse_string));
-    return result;
-}
-
-FILE *output_yacc;
-
-vector<char *> all_outputs;
-
-#line 124 "yacc/dmx_yacc.cpp"
+#line 104 "yacc/dmx_yacc.cpp"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -621,16 +601,16 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,   110,   110,   119,   120,   124,   125,   130,   131,   136,
-     145,   146,   151,   160,   161,   166,   167,   168,   172,   173,
-     178,   187,   188,   193,   199,   208,   214,   220,   228,   229,
-     234,   240,   246,   252,   260,   261,   265,   266,   270,   279,
-     280,   283,   284,   288,   294,   300,   306,   312,   318,   324,
-     330,   336,   342,   348,   354,   360,   368,   369,   373,   382,
-     386,   394,   395,   399,   405,   411,   420,   424,   430,   436,
-     442,   450,   451,   452,   456,   460,   466,   472,   478,   487,
-     493,   499,   508,   509,   510,   511,   512,   516,   517,   518,
-     522,   523,   527,   528,   532
+       0,    86,    86,    95,    96,   100,   101,   106,   107,   112,
+     121,   122,   127,   136,   137,   142,   148,   154,   163,   164,
+     169,   178,   179,   184,   190,   199,   205,   211,   219,   220,
+     225,   231,   237,   243,   251,   252,   261,   267,   276,   285,
+     286,   289,   290,   294,   300,   306,   312,   318,   324,   330,
+     336,   342,   348,   354,   360,   366,   374,   375,   379,   388,
+     397,   405,   406,   410,   416,   422,   431,   440,   446,   452,
+     458,   466,   472,   478,   487,   496,   502,   508,   514,   523,
+     529,   535,   544,   550,   556,   562,   568,   577,   583,   589,
+     598,   604,   613,   619,   628
 };
 #endif
 
@@ -1716,437 +1696,687 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* CompUnit: CompUnitList  */
-#line 111 "yacc/yacc.y"
+#line 87 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<CompUnit>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<CompUnit>");
         printf("%s\n", "<CompUnit>");
+    }
+#line 1706 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 9: /* ConstDecl: CONSTTK TYPETK ConstDef ConstDefs SEMICN  */
+#line 113 "yacc/yacc.y"
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<ConstDecl>");
+        printf("%s\n", "<ConstDecl>");
+    }
+#line 1716 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 12: /* ConstDef: IDENFR L_ConstExps_R ASSIGN ConstInitVal  */
+#line 128 "yacc/yacc.y"
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<ConstDef>");
+        printf("%s\n", "<ConstDef>");
     }
 #line 1726 "yacc/dmx_yacc.cpp"
     break;
 
-  case 9: /* ConstDecl: CONSTTK TYPETK ConstDef ConstDefs SEMICN  */
-#line 137 "yacc/yacc.y"
+  case 15: /* ConstInitVal: ConstExp  */
+#line 143 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<ConstDecl>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
-        printf("%s\n", "<ConstDecl>");
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<ConstInitVal>");
+        printf("%s\n", "<ConstInitVal>");
     }
 #line 1736 "yacc/dmx_yacc.cpp"
     break;
 
-  case 12: /* ConstDef: IDENFR L_ConstExps_R ASSIGN ConstInitVal  */
-#line 152 "yacc/yacc.y"
+  case 16: /* ConstInitVal: LBRACE RBRACE  */
+#line 149 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<ConstDef>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
-        printf("%s\n", "<ConstDef>");
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<ConstInitVal>");
+        printf("%s\n", "<ConstInitVal>");
     }
 #line 1746 "yacc/dmx_yacc.cpp"
     break;
 
-  case 20: /* VarDecl: TYPETK VarDef VarDefs SEMICN  */
-#line 179 "yacc/yacc.y"
+  case 17: /* ConstInitVal: LBRACE ConstInitVal ConstInitVals RBRACE  */
+#line 155 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<VarDecl>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
-        printf("%s\n", "<VarDecl>");
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<ConstInitVal>");
+        printf("%s\n", "<ConstInitVal>");
     }
 #line 1756 "yacc/dmx_yacc.cpp"
     break;
 
-  case 23: /* VarDef: IDENFR L_ConstExps_R  */
-#line 194 "yacc/yacc.y"
+  case 20: /* VarDecl: TYPETK VarDef VarDefs SEMICN  */
+#line 170 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<VarDef>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
-        printf("%s\n", "<VarDef>");
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<VarDecl>");
+        printf("%s\n", "<VarDecl>");
     }
 #line 1766 "yacc/dmx_yacc.cpp"
     break;
 
-  case 24: /* VarDef: IDENFR L_ConstExps_R ASSIGN InitVal  */
-#line 200 "yacc/yacc.y"
+  case 23: /* VarDef: IDENFR L_ConstExps_R  */
+#line 185 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<VarDef>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<VarDef>");
         printf("%s\n", "<VarDef>");
     }
 #line 1776 "yacc/dmx_yacc.cpp"
     break;
 
-  case 25: /* InitVal: Exp  */
-#line 209 "yacc/yacc.y"
+  case 24: /* VarDef: IDENFR L_ConstExps_R ASSIGN InitVal  */
+#line 191 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<InitVal>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
-        printf("%s\n", "<InitVal>");
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<VarDef>");
+        printf("%s\n", "<VarDef>");
     }
 #line 1786 "yacc/dmx_yacc.cpp"
     break;
 
-  case 26: /* InitVal: LBRACE RBRACE  */
-#line 215 "yacc/yacc.y"
+  case 25: /* InitVal: Exp  */
+#line 200 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<InitVal>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<InitVal>");
         printf("%s\n", "<InitVal>");
     }
 #line 1796 "yacc/dmx_yacc.cpp"
     break;
 
-  case 27: /* InitVal: LBRACE InitVal InitVals RBRACE  */
-#line 221 "yacc/yacc.y"
+  case 26: /* InitVal: LBRACE RBRACE  */
+#line 206 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<InitVal>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<InitVal>");
         printf("%s\n", "<InitVal>");
     }
 #line 1806 "yacc/dmx_yacc.cpp"
     break;
 
-  case 30: /* FuncDef: TYPETK IDENFR LPARENT RPARENT Block  */
-#line 235 "yacc/yacc.y"
+  case 27: /* InitVal: LBRACE InitVal InitVals RBRACE  */
+#line 212 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<FuncDef>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
-        printf("%s\n", "<FuncDef>");
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<InitVal>");
+        printf("%s\n", "<InitVal>");
     }
 #line 1816 "yacc/dmx_yacc.cpp"
     break;
 
-  case 31: /* FuncDef: TYPETK IDENFR LPARENT FuncFParam FuncFParams RPARENT Block  */
-#line 241 "yacc/yacc.y"
+  case 30: /* FuncDef: TYPETK IDENFR LPARENT RPARENT Block  */
+#line 226 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<FuncDef>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<FuncDef>");
         printf("%s\n", "<FuncDef>");
     }
 #line 1826 "yacc/dmx_yacc.cpp"
     break;
 
-  case 32: /* FuncDef: TYPETK MAINTK LPARENT RPARENT Block  */
-#line 247 "yacc/yacc.y"
+  case 31: /* FuncDef: TYPETK IDENFR LPARENT FuncFParam FuncFParams RPARENT Block  */
+#line 232 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<MainFuncDef>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
-        printf("%s\n", "<MainFuncDef>");
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<FuncDef>");
+        printf("%s\n", "<FuncDef>");
     }
 #line 1836 "yacc/dmx_yacc.cpp"
     break;
 
-  case 33: /* FuncDef: TYPETK MAINTK LPARENT FuncFParam FuncFParams RPARENT Block  */
-#line 253 "yacc/yacc.y"
+  case 32: /* FuncDef: TYPETK MAINTK LPARENT RPARENT Block  */
+#line 238 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<MainFuncDef>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<MainFuncDef>");
         printf("%s\n", "<MainFuncDef>");
     }
 #line 1846 "yacc/dmx_yacc.cpp"
     break;
 
-  case 38: /* Block: LBRACE BlockItems RBRACE  */
-#line 271 "yacc/yacc.y"
+  case 33: /* FuncDef: TYPETK MAINTK LPARENT FuncFParam FuncFParams RPARENT Block  */
+#line 244 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<Block>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
-        printf("%s\n", "<Block>");
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<MainFuncDef>");
+        printf("%s\n", "<MainFuncDef>");
     }
 #line 1856 "yacc/dmx_yacc.cpp"
     break;
 
-  case 43: /* Stmt: LVal ASSIGN Exp SEMICN  */
-#line 289 "yacc/yacc.y"
+  case 35: /* FuncFParams: COMMA FuncFParam FuncFParams  */
+#line 253 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<Stmt>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
-        printf("%s\n", "<Stmt>");
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<FuncFParams>");
+        printf("%s\n", "<FuncFParams>");
     }
 #line 1866 "yacc/dmx_yacc.cpp"
     break;
 
-  case 44: /* Stmt: SEMICN  */
-#line 295 "yacc/yacc.y"
+  case 36: /* FuncFParam: TYPETK IDENFR  */
+#line 262 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<Stmt>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
-        printf("%s\n", "<Stmt>");
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<FuncFParam>");
+        printf("%s\n", "<FuncFParam>");
     }
 #line 1876 "yacc/dmx_yacc.cpp"
     break;
 
-  case 45: /* Stmt: Exp SEMICN  */
-#line 301 "yacc/yacc.y"
+  case 37: /* FuncFParam: TYPETK IDENFR LBRACK RBRACK L_ConstExps_R  */
+#line 268 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<Stmt>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
-        printf("%s\n", "<Stmt>");
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<FuncFParam>");
+        printf("%s\n", "<FuncFParam>");
     }
 #line 1886 "yacc/dmx_yacc.cpp"
     break;
 
-  case 46: /* Stmt: Block  */
-#line 307 "yacc/yacc.y"
+  case 38: /* Block: LBRACE BlockItems RBRACE  */
+#line 277 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<Stmt>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
-        printf("%s\n", "<Stmt>");
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<Block>");
+        printf("%s\n", "<Block>");
     }
 #line 1896 "yacc/dmx_yacc.cpp"
     break;
 
-  case 47: /* Stmt: IFTK LPARENT Cond RPARENT Stmt ELSETK Stmt  */
-#line 313 "yacc/yacc.y"
+  case 43: /* Stmt: LVal ASSIGN Exp SEMICN  */
+#line 295 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<Stmt>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<Stmt>");
         printf("%s\n", "<Stmt>");
     }
 #line 1906 "yacc/dmx_yacc.cpp"
     break;
 
-  case 48: /* Stmt: IFTK LPARENT Cond RPARENT Stmt  */
-#line 319 "yacc/yacc.y"
+  case 44: /* Stmt: SEMICN  */
+#line 301 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<Stmt>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<Stmt>");
         printf("%s\n", "<Stmt>");
     }
 #line 1916 "yacc/dmx_yacc.cpp"
     break;
 
-  case 49: /* Stmt: WHILETK LPARENT Cond RPARENT Stmt  */
-#line 325 "yacc/yacc.y"
+  case 45: /* Stmt: Exp SEMICN  */
+#line 307 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<Stmt>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<Stmt>");
         printf("%s\n", "<Stmt>");
     }
 #line 1926 "yacc/dmx_yacc.cpp"
     break;
 
-  case 50: /* Stmt: BREAKTK SEMICN  */
-#line 331 "yacc/yacc.y"
+  case 46: /* Stmt: Block  */
+#line 313 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<Stmt>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<Stmt>");
         printf("%s\n", "<Stmt>");
     }
 #line 1936 "yacc/dmx_yacc.cpp"
     break;
 
-  case 51: /* Stmt: CONTINUETK SEMICN  */
-#line 337 "yacc/yacc.y"
+  case 47: /* Stmt: IFTK LPARENT Cond RPARENT Stmt ELSETK Stmt  */
+#line 319 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<Stmt>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<Stmt>");
         printf("%s\n", "<Stmt>");
     }
 #line 1946 "yacc/dmx_yacc.cpp"
     break;
 
-  case 52: /* Stmt: RETURNTK SEMICN  */
-#line 343 "yacc/yacc.y"
+  case 48: /* Stmt: IFTK LPARENT Cond RPARENT Stmt  */
+#line 325 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<Stmt>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<Stmt>");
         printf("%s\n", "<Stmt>");
     }
 #line 1956 "yacc/dmx_yacc.cpp"
     break;
 
-  case 53: /* Stmt: RETURNTK Exp SEMICN  */
-#line 349 "yacc/yacc.y"
+  case 49: /* Stmt: WHILETK LPARENT Cond RPARENT Stmt  */
+#line 331 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<Stmt>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<Stmt>");
         printf("%s\n", "<Stmt>");
     }
 #line 1966 "yacc/dmx_yacc.cpp"
     break;
 
-  case 54: /* Stmt: LVal ASSIGN GETINTTK LPARENT RPARENT SEMICN  */
-#line 355 "yacc/yacc.y"
+  case 50: /* Stmt: BREAKTK SEMICN  */
+#line 337 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<Stmt>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<Stmt>");
         printf("%s\n", "<Stmt>");
     }
 #line 1976 "yacc/dmx_yacc.cpp"
     break;
 
-  case 55: /* Stmt: PRINTFTK LPARENT STRCON Exps RPARENT SEMICN  */
-#line 361 "yacc/yacc.y"
+  case 51: /* Stmt: CONTINUETK SEMICN  */
+#line 343 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<Stmt>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<Stmt>");
         printf("%s\n", "<Stmt>");
     }
 #line 1986 "yacc/dmx_yacc.cpp"
     break;
 
-  case 58: /* Exp: AddExp  */
-#line 374 "yacc/yacc.y"
+  case 52: /* Stmt: RETURNTK SEMICN  */
+#line 349 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<Exp>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
-        printf("%s\n", "<Exp>");
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<Stmt>");
+        printf("%s\n", "<Stmt>");
     }
 #line 1996 "yacc/dmx_yacc.cpp"
     break;
 
-  case 60: /* LVal: IDENFR L_Exps_R  */
-#line 387 "yacc/yacc.y"
+  case 53: /* Stmt: RETURNTK Exp SEMICN  */
+#line 355 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<LVal>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
-        printf("%s\n", "<LVal>");
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<Stmt>");
+        printf("%s\n", "<Stmt>");
     }
 #line 2006 "yacc/dmx_yacc.cpp"
     break;
 
-  case 63: /* PrimaryExp: LPARENT Exp RPARENT  */
-#line 400 "yacc/yacc.y"
+  case 54: /* Stmt: LVal ASSIGN GETINTTK LPARENT RPARENT SEMICN  */
+#line 361 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<PrimaryExp>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
-        printf("%s\n", "<PrimaryExp>");
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<Stmt>");
+        printf("%s\n", "<Stmt>");
     }
 #line 2016 "yacc/dmx_yacc.cpp"
     break;
 
-  case 64: /* PrimaryExp: LVal  */
-#line 406 "yacc/yacc.y"
+  case 55: /* Stmt: PRINTFTK LPARENT STRCON Exps RPARENT SEMICN  */
+#line 367 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<PrimaryExp>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
-        printf("%s\n", "<PrimaryExp>");
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<Stmt>");
+        printf("%s\n", "<Stmt>");
     }
 #line 2026 "yacc/dmx_yacc.cpp"
     break;
 
-  case 65: /* PrimaryExp: Number  */
-#line 412 "yacc/yacc.y"
+  case 58: /* Exp: AddExp  */
+#line 380 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<PrimaryExp>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
-        printf("%s\n", "<PrimaryExp>");
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<Exp>");
+        printf("%s\n", "<Exp>");
     }
 #line 2036 "yacc/dmx_yacc.cpp"
     break;
 
-  case 67: /* UnaryExp: PrimaryExp  */
-#line 425 "yacc/yacc.y"
+  case 59: /* Cond: LOrExp  */
+#line 389 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<UnaryExp>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
-        printf("%s\n", "<UnaryExp>");
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<Cond>");
+        printf("%s\n", "<Cond>");
     }
 #line 2046 "yacc/dmx_yacc.cpp"
     break;
 
-  case 68: /* UnaryExp: IDENFR LPARENT RPARENT  */
-#line 431 "yacc/yacc.y"
+  case 60: /* LVal: IDENFR L_Exps_R  */
+#line 398 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<UnaryExp>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
-        printf("%s\n", "<UnaryExp>");
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<LVal>");
+        printf("%s\n", "<LVal>");
     }
 #line 2056 "yacc/dmx_yacc.cpp"
     break;
 
-  case 69: /* UnaryExp: IDENFR LPARENT FuncRParams RPARENT  */
-#line 437 "yacc/yacc.y"
+  case 63: /* PrimaryExp: LPARENT Exp RPARENT  */
+#line 411 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<UnaryExp>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
-        printf("%s\n", "<UnaryExp>");
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<PrimaryExp>");
+        printf("%s\n", "<PrimaryExp>");
     }
 #line 2066 "yacc/dmx_yacc.cpp"
     break;
 
-  case 70: /* UnaryExp: UnaryOp UnaryExp  */
-#line 443 "yacc/yacc.y"
+  case 64: /* PrimaryExp: LVal  */
+#line 417 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<UnaryExp>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
-        printf("%s\n", "<UnaryExp>");
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<PrimaryExp>");
+        printf("%s\n", "<PrimaryExp>");
     }
 #line 2076 "yacc/dmx_yacc.cpp"
     break;
 
-  case 75: /* MulExp: UnaryExp  */
-#line 461 "yacc/yacc.y"
+  case 65: /* PrimaryExp: Number  */
+#line 423 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<MulExp>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
-        printf("%s\n", "<MulExp>");
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<PrimaryExp>");
+        printf("%s\n", "<PrimaryExp>");
     }
 #line 2086 "yacc/dmx_yacc.cpp"
     break;
 
-  case 76: /* MulExp: MulExp MULT UnaryExp  */
-#line 467 "yacc/yacc.y"
+  case 66: /* Number: INTCON  */
+#line 432 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<MulExp>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
-        printf("%s\n", "<MulExp>");
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<Number>");
+        printf("%s\n", "<Number>");
     }
 #line 2096 "yacc/dmx_yacc.cpp"
     break;
 
-  case 77: /* MulExp: MulExp DIV UnaryExp  */
-#line 473 "yacc/yacc.y"
+  case 67: /* UnaryExp: PrimaryExp  */
+#line 441 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<MulExp>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
-        printf("%s\n", "<MulExp>");
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<UnaryExp>");
+        printf("%s\n", "<UnaryExp>");
     }
 #line 2106 "yacc/dmx_yacc.cpp"
     break;
 
-  case 78: /* MulExp: MulExp MOD UnaryExp  */
-#line 479 "yacc/yacc.y"
+  case 68: /* UnaryExp: IDENFR LPARENT RPARENT  */
+#line 447 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<MulExp>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
-        printf("%s\n", "<MulExp>");
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<UnaryExp>");
+        printf("%s\n", "<UnaryExp>");
     }
 #line 2116 "yacc/dmx_yacc.cpp"
     break;
 
-  case 79: /* AddExp: MulExp  */
-#line 488 "yacc/yacc.y"
+  case 69: /* UnaryExp: IDENFR LPARENT FuncRParams RPARENT  */
+#line 453 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<AddExp>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
-        printf("%s\n", "<AddExp>");
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<UnaryExp>");
+        printf("%s\n", "<UnaryExp>");
     }
 #line 2126 "yacc/dmx_yacc.cpp"
     break;
 
-  case 80: /* AddExp: AddExp PLUS MulExp  */
-#line 494 "yacc/yacc.y"
+  case 70: /* UnaryExp: UnaryOp UnaryExp  */
+#line 459 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<AddExp>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
-        printf("%s\n", "<AddExp>");
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<UnaryExp>");
+        printf("%s\n", "<UnaryExp>");
     }
 #line 2136 "yacc/dmx_yacc.cpp"
     break;
 
-  case 81: /* AddExp: AddExp MINU MulExp  */
-#line 500 "yacc/yacc.y"
+  case 71: /* UnaryOp: PLUS  */
+#line 467 "yacc/yacc.y"
     {
-        char *result = output_format((char *)"<AddExp>", token_name(parse_string, &(yyloc)));
-        all_outputs.push_back(result);
-        printf("%s\n", "<AddExp>");
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<UnaryOp>");
+        printf("%s\n", "<UnaryOp>");
     }
 #line 2146 "yacc/dmx_yacc.cpp"
     break;
 
+  case 72: /* UnaryOp: MINU  */
+#line 473 "yacc/yacc.y"
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<UnaryOp>");
+        printf("%s\n", "<UnaryOp>");
+    }
+#line 2156 "yacc/dmx_yacc.cpp"
+    break;
 
-#line 2150 "yacc/dmx_yacc.cpp"
+  case 73: /* UnaryOp: NOT  */
+#line 479 "yacc/yacc.y"
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<UnaryOp>");
+        printf("%s\n", "<UnaryOp>");
+    }
+#line 2166 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 74: /* FuncRParams: Exp Exps  */
+#line 488 "yacc/yacc.y"
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<FuncRParams>");
+        printf("%s\n", "<FuncRParams>");
+    }
+#line 2176 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 75: /* MulExp: UnaryExp  */
+#line 497 "yacc/yacc.y"
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<MulExp>");
+        printf("%s\n", "<MulExp>");
+    }
+#line 2186 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 76: /* MulExp: MulExp MULT UnaryExp  */
+#line 503 "yacc/yacc.y"
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<MulExp>");
+        printf("%s\n", "<MulExp>");
+    }
+#line 2196 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 77: /* MulExp: MulExp DIV UnaryExp  */
+#line 509 "yacc/yacc.y"
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<MulExp>");
+        printf("%s\n", "<MulExp>");
+    }
+#line 2206 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 78: /* MulExp: MulExp MOD UnaryExp  */
+#line 515 "yacc/yacc.y"
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<MulExp>");
+        printf("%s\n", "<MulExp>");
+    }
+#line 2216 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 79: /* AddExp: MulExp  */
+#line 524 "yacc/yacc.y"
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<AddExp>");
+        printf("%s\n", "<AddExp>");
+    }
+#line 2226 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 80: /* AddExp: AddExp PLUS MulExp  */
+#line 530 "yacc/yacc.y"
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<AddExp>");
+        printf("%s\n", "<AddExp>");
+    }
+#line 2236 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 81: /* AddExp: AddExp MINU MulExp  */
+#line 536 "yacc/yacc.y"
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<AddExp>");
+        printf("%s\n", "<AddExp>");
+    }
+#line 2246 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 82: /* RelExp: AddExp  */
+#line 545 "yacc/yacc.y"
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<RelExp>");
+        printf("%s\n", "<RelExp>");
+    }
+#line 2256 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 83: /* RelExp: RelExp LSS AddExp  */
+#line 551 "yacc/yacc.y"
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<RelExp>");
+        printf("%s\n", "<RelExp>");
+    }
+#line 2266 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 84: /* RelExp: RelExp GRE AddExp  */
+#line 557 "yacc/yacc.y"
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<RelExp>");
+        printf("%s\n", "<RelExp>");
+    }
+#line 2276 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 85: /* RelExp: RelExp LEQ AddExp  */
+#line 563 "yacc/yacc.y"
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<RelExp>");
+        printf("%s\n", "<RelExp>");
+    }
+#line 2286 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 86: /* RelExp: RelExp GEQ AddExp  */
+#line 569 "yacc/yacc.y"
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<RelExp>");
+        printf("%s\n", "<RelExp>");
+    }
+#line 2296 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 87: /* EqExp: RelExp  */
+#line 578 "yacc/yacc.y"
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<EqExp>");
+        printf("%s\n", "<EqExp>");
+    }
+#line 2306 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 88: /* EqExp: EqExp EQL RelExp  */
+#line 584 "yacc/yacc.y"
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<EqExp>");
+        printf("%s\n", "<EqExp>");
+    }
+#line 2316 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 89: /* EqExp: EqExp NEQ RelExp  */
+#line 590 "yacc/yacc.y"
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<EqExp>");
+        printf("%s\n", "<EqExp>");
+    }
+#line 2326 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 90: /* LAndExp: EqExp  */
+#line 599 "yacc/yacc.y"
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<LAndExp>");
+        printf("%s\n", "<LAndExp>");
+    }
+#line 2336 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 91: /* LAndExp: LAndExp AND EqExp  */
+#line 605 "yacc/yacc.y"
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<LAndExp>");
+        printf("%s\n", "<LAndExp>");
+    }
+#line 2346 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 92: /* LOrExp: LAndExp  */
+#line 614 "yacc/yacc.y"
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<LOrExp>");
+        printf("%s\n", "<LOrExp>");
+    }
+#line 2356 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 93: /* LOrExp: LOrExp OR LAndExp  */
+#line 620 "yacc/yacc.y"
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<LOrExp>");
+        printf("%s\n", "<LOrExp>");
+    }
+#line 2366 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 94: /* ConstExp: AddExp  */
+#line 629 "yacc/yacc.y"
+    {
+        cur_token = yychar;
+        fprintf(output_yacc, "%s\n", "<ConstExp>");
+        printf("%s\n", "<ConstExp>");
+    }
+#line 2376 "yacc/dmx_yacc.cpp"
+    break;
+
+
+#line 2380 "yacc/dmx_yacc.cpp"
 
       default: break;
     }
@@ -2375,7 +2605,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 534 "yacc/yacc.y"
+#line 635 "yacc/yacc.y"
 
 
 int yywrap(){
@@ -2400,97 +2630,6 @@ int SysY_parse(const char* parse_string, const char* path)
 
     yylex_destroy(scanner); 
 
-    // 将输出的结果保留，准备进行下一步处理
-    printf("%s\n", "--------- test ---------");
-    for(size_t i = 0; i < all_outputs.size(); i++)
-    {
-        printf("%s\n", all_outputs[i]);
-    }
-
-    // yacc 是 LALR(1) 机制，会提前阅读下一个 token，需要进行前移处理
-    for(int i = 0; i < all_outputs.size(); i++)
-    {
-        // 如果是词法输出，跳过
-        if(all_outputs[i][0] != '<' || i == 0)
-            continue;
-
-        // 判断是否需要前移
-        char *first = all_outputs[i];
-        int num = 0;
-        while(*first != '>' && *first != '\0')
-        {
-            first++;
-            num++;
-        }
-        
-        // 排除 < 打头的 token
-        if(*first == '\0')
-            continue;
-        
-        // 找到上一个语法输出
-        int pos = 1;
-        while(i - pos > 0 && all_outputs[i - pos][0] == '<')
-            pos++;
-        
-        // 非法
-        if(pos == i)
-            continue;
-
-        first++;
-        char *second = all_outputs[i - pos] + strlen(all_outputs[i - pos]) - 1;
-
-        // 词法分析也需要筛选出最后一个单词
-        while(*second != ' ' && second >= all_outputs[i - pos])
-            second--;
-        second++;
-
-        // 判断 first =? *second
-        int len1 = strlen(first);
-        int len2 = strlen(second);
-
-        if(len1 < len2)
-        {
-            // 前移操作
-            swap(all_outputs[i], all_outputs[i - pos]);
-            // 删除无用信息
-            all_outputs[i - pos][num + 1] = '\0';
-            continue;
-        }
-
-        while(len2 >= 0)
-        {
-            if(first[len1] != second[len2])
-                break;
-            len1--;
-            len2--;
-        }
-
-        if(len2 >= 0)
-        {
-            // 前移操作
-            swap(all_outputs[i], all_outputs[i - 1]);
-            // 删除无用信息
-            all_outputs[i - pos][num + 1] = '\0';
-            continue;
-        }
-        
-        // 删除无用信息
-        all_outputs[i][num + 1] = '\0';
-    }
-
-    // 最终的输出
-    printf("%s\n", "--------- final answer ---------");
-    for(size_t i = 0; i < all_outputs.size(); i++)
-    {
-        printf("%s\n", all_outputs[i]);
-    }
-
-    // 写入 output.txt
-    output_yacc = fopen(path, "w");
-    for(size_t i = 0; i < all_outputs.size(); i++)
-    {
-        fprintf(output_yacc, "%s\n", all_outputs[i]);
-    }
-
+    fclose(output_yacc);
     return result;
 }

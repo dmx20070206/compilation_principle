@@ -30,13 +30,6 @@ while (0);
 /* 支持位置跟踪 */
 %option bison-locations
 %{
-
-#ifndef register
-#define register 
-#endif // register
-
-extern vector<char *> all_outputs;
-
 #include "../yacc/dmx_yacc.hpp"
 
 unordered_map<int, char *> token_map = {
@@ -46,7 +39,7 @@ unordered_map<int, char *> token_map = {
     {261, (char *)"CONSTTK "},                 // CONSTTK
     {262, (char *)"GETINTTK "},                // GETINTTK
     {263, (char *)"PRINTFTK "},                // PRINTFTK
-    {264, (char *)"BREAKTK  "},                 // BREAKTK
+    {264, (char *)"BREAKTK  "},                // BREAKTK
     {265, (char *)"RETURNTK "},                // RETURNTK
     {266, (char *)"CONTINUETK "},              // CONTINUETK
     {267, (char *)"IDENFR "},                  // IDENFR
@@ -80,22 +73,48 @@ unordered_map<int, char *> token_map = {
     {295, (char *)"ERROR "}                    // ERROR
 };
 
+extern FILE *output_yacc;
+int last_token = 20070206;
+char *last_text = nullptr;
+
+extern int cur_token;
+
 void output(int token, char *text) 
 {
+    if(last_token == 20070206 || last_text == nullptr)
+    {
+        last_token = token;
+        last_text = strdup(text);
+        return;
+    }
+
     char *temp = nullptr;
 
     // TYPETK 的特殊判断
-    if(strcmp((char *)token_map[token], (char *)"TYPETK ") == 0)
+    if(strcmp((char *)token_map[last_token], (char *)"TYPETK ") == 0)
     {
-        temp = strcmp((char *)"int", text) == 0 ? strdup((char *)"INTTK ") : strdup((char *)"VOIDTK ");
+        temp = strcmp((char *)"int", last_text) == 0 ? strdup((char *)"INTTK ") : strdup((char *)"VOIDTK ");
     }
     else
     {
-        temp = strdup((char *)token_map[token]); 
+        temp = strdup((char *)token_map[last_token]); 
     }
-    strcat(temp, text); 
-    all_outputs.push_back(temp); 
-    printf("%s\n", text); 
+    strcat(temp, last_text); 
+    if(cur_token == -2)
+    {
+        printf("%s %d\n", temp, cur_token);
+        fprintf(output_yacc, "DMX%s\n", temp);
+    }
+    else
+    {
+        printf("%s\n", temp);
+        fprintf(output_yacc, "%s\n", temp);
+    }
+
+    last_token = token;
+    last_text = strdup(text);
+
+    cur_token = -1;
 }
 
 #define RETURN_TOKEN(token) return token;
@@ -147,7 +166,7 @@ void output(int token, char *text)
 "}"                                { output(RBRACE, yytext);     RETURN_TOKEN(RBRACE);     }
 
 [\ \t\n\b\f]                       
-.                                  {                     RETURN_TOKEN(ERROR);      }
+.                                 
 
 %%
 void scan_string(const char *str, yyscan_t scanner)
