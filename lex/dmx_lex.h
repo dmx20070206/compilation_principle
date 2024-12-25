@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <vector>
 #include <unordered_map>
+#include <fstream>
 using namespace std;
 
 #define YY_TYPEDEF_YY_SIZE_T
@@ -22,7 +23,7 @@ do {                                                         \
 }                                                            \
 while (0);
 
-#line 26 "lex/dmx_lex.h"
+#line 27 "lex/dmx_lex.h"
 
 #define  YY_INT_ALIGNED short int
 
@@ -536,9 +537,9 @@ extern int yylex \
 #undef yyTABLES_NAME
 #endif
 
-#line 171 "lex/lex.l"
+#line 149 "lex/lex.l"
 
 
-#line 543 "lex/dmx_lex.h"
+#line 544 "lex/dmx_lex.h"
 #undef yyIN_HEADER
 #endif /* yyHEADER_H */

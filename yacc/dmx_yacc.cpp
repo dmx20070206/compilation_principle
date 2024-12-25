@@ -74,18 +74,19 @@
 #include <string.h>
 #include <vector>
 #include <algorithm>
+#include <fstream>
 
 #include "../yacc/dmx_yacc.hpp"
 #include "../lex/dmx_lex.h"
 
 using namespace std;
 
-FILE *output_yacc = fopen("output_first.txt", "w");
+ofstream output_file("output_first.txt");
 extern unordered_map<int, char *> token_map;
 
 int yyerror(YYLTYPE *llocp, const char *parse_string, yyscan_t scanner, const char *msg)
 {
-    fprintf(output_yacc, "Syntax error: %s\n", msg);
+    output_file << "Syntax error: %s\n" << msg;
     return 0;
 }
 
@@ -100,7 +101,7 @@ char *token_name(const char *parse_string, YYLTYPE *llocp)
 
 int cur_token = -1;
 
-#line 104 "yacc/dmx_yacc.cpp"
+#line 105 "yacc/dmx_yacc.cpp"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -601,16 +602,16 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,    86,    86,    95,    96,   100,   101,   106,   107,   112,
-     121,   122,   127,   136,   137,   142,   148,   154,   163,   164,
-     169,   178,   179,   184,   190,   199,   205,   211,   219,   220,
-     225,   231,   237,   243,   251,   252,   261,   267,   276,   285,
-     286,   289,   290,   294,   300,   306,   312,   318,   324,   330,
-     336,   342,   348,   354,   360,   366,   374,   375,   379,   388,
-     397,   405,   406,   410,   416,   422,   431,   440,   446,   452,
-     458,   466,   472,   478,   487,   496,   502,   508,   514,   523,
-     529,   535,   544,   550,   556,   562,   568,   577,   583,   589,
-     598,   604,   613,   619,   628
+       0,    87,    87,    97,    98,   102,   103,   108,   109,   114,
+     124,   125,   130,   140,   141,   146,   153,   160,   170,   171,
+     176,   186,   187,   192,   199,   209,   216,   223,   232,   233,
+     238,   245,   252,   259,   268,   269,   279,   286,   296,   306,
+     307,   310,   311,   315,   322,   329,   336,   343,   350,   357,
+     364,   371,   378,   385,   392,   399,   408,   409,   413,   423,
+     433,   442,   443,   447,   454,   461,   471,   481,   488,   495,
+     502,   511,   518,   525,   535,   545,   552,   559,   566,   576,
+     583,   590,   600,   607,   614,   621,   628,   638,   645,   652,
+     662,   669,   679,   686,   696
 };
 #endif
 
@@ -1696,687 +1697,755 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* CompUnit: CompUnitList  */
-#line 87 "yacc/yacc.y"
+#line 88 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<CompUnit>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";  
+        output_file << "<CompUnit>" << "\n";
         printf("%s\n", "<CompUnit>");
     }
-#line 1706 "yacc/dmx_yacc.cpp"
+#line 1708 "yacc/dmx_yacc.cpp"
     break;
 
   case 9: /* ConstDecl: CONSTTK TYPETK ConstDef ConstDefs SEMICN  */
-#line 113 "yacc/yacc.y"
+#line 115 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<ConstDecl>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<ConstDecl>" << "\n";
         printf("%s\n", "<ConstDecl>");
     }
-#line 1716 "yacc/dmx_yacc.cpp"
+#line 1719 "yacc/dmx_yacc.cpp"
     break;
 
   case 12: /* ConstDef: IDENFR L_ConstExps_R ASSIGN ConstInitVal  */
-#line 128 "yacc/yacc.y"
+#line 131 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<ConstDef>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<ConstDef>" << "\n";
         printf("%s\n", "<ConstDef>");
     }
-#line 1726 "yacc/dmx_yacc.cpp"
+#line 1730 "yacc/dmx_yacc.cpp"
     break;
 
   case 15: /* ConstInitVal: ConstExp  */
-#line 143 "yacc/yacc.y"
+#line 147 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<ConstInitVal>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<ConstInitVal>" << "\n";
         printf("%s\n", "<ConstInitVal>");
     }
-#line 1736 "yacc/dmx_yacc.cpp"
+#line 1741 "yacc/dmx_yacc.cpp"
     break;
 
   case 16: /* ConstInitVal: LBRACE RBRACE  */
-#line 149 "yacc/yacc.y"
+#line 154 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<ConstInitVal>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<ConstInitVal>" << "\n";
         printf("%s\n", "<ConstInitVal>");
     }
-#line 1746 "yacc/dmx_yacc.cpp"
+#line 1752 "yacc/dmx_yacc.cpp"
     break;
 
   case 17: /* ConstInitVal: LBRACE ConstInitVal ConstInitVals RBRACE  */
-#line 155 "yacc/yacc.y"
+#line 161 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<ConstInitVal>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<ConstInitVal>" << "\n";
         printf("%s\n", "<ConstInitVal>");
     }
-#line 1756 "yacc/dmx_yacc.cpp"
+#line 1763 "yacc/dmx_yacc.cpp"
     break;
 
   case 20: /* VarDecl: TYPETK VarDef VarDefs SEMICN  */
-#line 170 "yacc/yacc.y"
+#line 177 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<VarDecl>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<VarDecl>" << "\n";
         printf("%s\n", "<VarDecl>");
     }
-#line 1766 "yacc/dmx_yacc.cpp"
+#line 1774 "yacc/dmx_yacc.cpp"
     break;
 
   case 23: /* VarDef: IDENFR L_ConstExps_R  */
-#line 185 "yacc/yacc.y"
+#line 193 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<VarDef>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<VarDef>" << "\n";
         printf("%s\n", "<VarDef>");
     }
-#line 1776 "yacc/dmx_yacc.cpp"
+#line 1785 "yacc/dmx_yacc.cpp"
     break;
 
   case 24: /* VarDef: IDENFR L_ConstExps_R ASSIGN InitVal  */
-#line 191 "yacc/yacc.y"
-    {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<VarDef>");
-        printf("%s\n", "<VarDef>");
-    }
-#line 1786 "yacc/dmx_yacc.cpp"
-    break;
-
-  case 25: /* InitVal: Exp  */
 #line 200 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<InitVal>");
-        printf("%s\n", "<InitVal>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<VarDef>" << "\n";
+        printf("%s\n", "<VarDef>");
     }
 #line 1796 "yacc/dmx_yacc.cpp"
     break;
 
-  case 26: /* InitVal: LBRACE RBRACE  */
-#line 206 "yacc/yacc.y"
+  case 25: /* InitVal: Exp  */
+#line 210 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<InitVal>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<InitVal>" << "\n";
         printf("%s\n", "<InitVal>");
     }
-#line 1806 "yacc/dmx_yacc.cpp"
+#line 1807 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 26: /* InitVal: LBRACE RBRACE  */
+#line 217 "yacc/yacc.y"
+    {
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<InitVal>" << "\n";
+        printf("%s\n", "<InitVal>");
+    }
+#line 1818 "yacc/dmx_yacc.cpp"
     break;
 
   case 27: /* InitVal: LBRACE InitVal InitVals RBRACE  */
-#line 212 "yacc/yacc.y"
+#line 224 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<InitVal>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<InitVal>" << "\n";
         printf("%s\n", "<InitVal>");
     }
-#line 1816 "yacc/dmx_yacc.cpp"
+#line 1829 "yacc/dmx_yacc.cpp"
     break;
 
   case 30: /* FuncDef: TYPETK IDENFR LPARENT RPARENT Block  */
-#line 226 "yacc/yacc.y"
+#line 239 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<FuncDef>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<FuncDef>" << "\n";
         printf("%s\n", "<FuncDef>");
     }
-#line 1826 "yacc/dmx_yacc.cpp"
+#line 1840 "yacc/dmx_yacc.cpp"
     break;
 
   case 31: /* FuncDef: TYPETK IDENFR LPARENT FuncFParam FuncFParams RPARENT Block  */
-#line 232 "yacc/yacc.y"
+#line 246 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<FuncDef>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<FuncDef>" << "\n";
         printf("%s\n", "<FuncDef>");
     }
-#line 1836 "yacc/dmx_yacc.cpp"
+#line 1851 "yacc/dmx_yacc.cpp"
     break;
 
   case 32: /* FuncDef: TYPETK MAINTK LPARENT RPARENT Block  */
-#line 238 "yacc/yacc.y"
+#line 253 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<MainFuncDef>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<MainFuncDef>" << "\n";
         printf("%s\n", "<MainFuncDef>");
     }
-#line 1846 "yacc/dmx_yacc.cpp"
+#line 1862 "yacc/dmx_yacc.cpp"
     break;
 
   case 33: /* FuncDef: TYPETK MAINTK LPARENT FuncFParam FuncFParams RPARENT Block  */
-#line 244 "yacc/yacc.y"
+#line 260 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<MainFuncDef>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<MainFuncDef>" << "\n";
         printf("%s\n", "<MainFuncDef>");
     }
-#line 1856 "yacc/dmx_yacc.cpp"
+#line 1873 "yacc/dmx_yacc.cpp"
     break;
 
   case 35: /* FuncFParams: COMMA FuncFParam FuncFParams  */
-#line 253 "yacc/yacc.y"
+#line 270 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<FuncFParams>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<FuncFParams>" << "\n";
         printf("%s\n", "<FuncFParams>");
     }
-#line 1866 "yacc/dmx_yacc.cpp"
+#line 1884 "yacc/dmx_yacc.cpp"
     break;
 
   case 36: /* FuncFParam: TYPETK IDENFR  */
-#line 262 "yacc/yacc.y"
+#line 280 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<FuncFParam>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<FuncFParam>" << "\n";
         printf("%s\n", "<FuncFParam>");
     }
-#line 1876 "yacc/dmx_yacc.cpp"
+#line 1895 "yacc/dmx_yacc.cpp"
     break;
 
   case 37: /* FuncFParam: TYPETK IDENFR LBRACK RBRACK L_ConstExps_R  */
-#line 268 "yacc/yacc.y"
+#line 287 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<FuncFParam>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<FuncFParam>" << "\n";
         printf("%s\n", "<FuncFParam>");
-    }
-#line 1886 "yacc/dmx_yacc.cpp"
-    break;
-
-  case 38: /* Block: LBRACE BlockItems RBRACE  */
-#line 277 "yacc/yacc.y"
-    {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<Block>");
-        printf("%s\n", "<Block>");
-    }
-#line 1896 "yacc/dmx_yacc.cpp"
-    break;
-
-  case 43: /* Stmt: LVal ASSIGN Exp SEMICN  */
-#line 295 "yacc/yacc.y"
-    {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<Stmt>");
-        printf("%s\n", "<Stmt>");
     }
 #line 1906 "yacc/dmx_yacc.cpp"
     break;
 
-  case 44: /* Stmt: SEMICN  */
-#line 301 "yacc/yacc.y"
+  case 38: /* Block: LBRACE BlockItems RBRACE  */
+#line 297 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<Stmt>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<Block>" << "\n";
+        printf("%s\n", "<Block>");
+    }
+#line 1917 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 43: /* Stmt: LVal ASSIGN Exp SEMICN  */
+#line 316 "yacc/yacc.y"
+    {
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<Stmt>" << "\n";
         printf("%s\n", "<Stmt>");
     }
-#line 1916 "yacc/dmx_yacc.cpp"
+#line 1928 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 44: /* Stmt: SEMICN  */
+#line 323 "yacc/yacc.y"
+    {
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<Stmt>" << "\n";
+        printf("%s\n", "<Stmt>");
+    }
+#line 1939 "yacc/dmx_yacc.cpp"
     break;
 
   case 45: /* Stmt: Exp SEMICN  */
-#line 307 "yacc/yacc.y"
+#line 330 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<Stmt>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<Stmt>" << "\n";
         printf("%s\n", "<Stmt>");
     }
-#line 1926 "yacc/dmx_yacc.cpp"
+#line 1950 "yacc/dmx_yacc.cpp"
     break;
 
   case 46: /* Stmt: Block  */
-#line 313 "yacc/yacc.y"
+#line 337 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<Stmt>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<Stmt>" << "\n";
         printf("%s\n", "<Stmt>");
     }
-#line 1936 "yacc/dmx_yacc.cpp"
+#line 1961 "yacc/dmx_yacc.cpp"
     break;
 
   case 47: /* Stmt: IFTK LPARENT Cond RPARENT Stmt ELSETK Stmt  */
-#line 319 "yacc/yacc.y"
+#line 344 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<Stmt>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<Stmt>" << "\n";
         printf("%s\n", "<Stmt>");
     }
-#line 1946 "yacc/dmx_yacc.cpp"
+#line 1972 "yacc/dmx_yacc.cpp"
     break;
 
   case 48: /* Stmt: IFTK LPARENT Cond RPARENT Stmt  */
-#line 325 "yacc/yacc.y"
+#line 351 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<Stmt>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<Stmt>" << "\n";
         printf("%s\n", "<Stmt>");
     }
-#line 1956 "yacc/dmx_yacc.cpp"
+#line 1983 "yacc/dmx_yacc.cpp"
     break;
 
   case 49: /* Stmt: WHILETK LPARENT Cond RPARENT Stmt  */
-#line 331 "yacc/yacc.y"
+#line 358 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<Stmt>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<Stmt>" << "\n";
         printf("%s\n", "<Stmt>");
     }
-#line 1966 "yacc/dmx_yacc.cpp"
+#line 1994 "yacc/dmx_yacc.cpp"
     break;
 
   case 50: /* Stmt: BREAKTK SEMICN  */
-#line 337 "yacc/yacc.y"
+#line 365 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<Stmt>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<Stmt>" << "\n";
         printf("%s\n", "<Stmt>");
     }
-#line 1976 "yacc/dmx_yacc.cpp"
+#line 2005 "yacc/dmx_yacc.cpp"
     break;
 
   case 51: /* Stmt: CONTINUETK SEMICN  */
-#line 343 "yacc/yacc.y"
+#line 372 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<Stmt>");
-        printf("%s\n", "<Stmt>");
-    }
-#line 1986 "yacc/dmx_yacc.cpp"
-    break;
-
-  case 52: /* Stmt: RETURNTK SEMICN  */
-#line 349 "yacc/yacc.y"
-    {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<Stmt>");
-        printf("%s\n", "<Stmt>");
-    }
-#line 1996 "yacc/dmx_yacc.cpp"
-    break;
-
-  case 53: /* Stmt: RETURNTK Exp SEMICN  */
-#line 355 "yacc/yacc.y"
-    {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<Stmt>");
-        printf("%s\n", "<Stmt>");
-    }
-#line 2006 "yacc/dmx_yacc.cpp"
-    break;
-
-  case 54: /* Stmt: LVal ASSIGN GETINTTK LPARENT RPARENT SEMICN  */
-#line 361 "yacc/yacc.y"
-    {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<Stmt>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<Stmt>" << "\n";
         printf("%s\n", "<Stmt>");
     }
 #line 2016 "yacc/dmx_yacc.cpp"
     break;
 
-  case 55: /* Stmt: PRINTFTK LPARENT STRCON Exps RPARENT SEMICN  */
-#line 367 "yacc/yacc.y"
+  case 52: /* Stmt: RETURNTK SEMICN  */
+#line 379 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<Stmt>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<Stmt>" << "\n";
         printf("%s\n", "<Stmt>");
     }
-#line 2026 "yacc/dmx_yacc.cpp"
+#line 2027 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 53: /* Stmt: RETURNTK Exp SEMICN  */
+#line 386 "yacc/yacc.y"
+    {
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<Stmt>" << "\n";
+        printf("%s\n", "<Stmt>");
+    }
+#line 2038 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 54: /* Stmt: LVal ASSIGN GETINTTK LPARENT RPARENT SEMICN  */
+#line 393 "yacc/yacc.y"
+    {
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<Stmt>" << "\n";
+        printf("%s\n", "<Stmt>");
+    }
+#line 2049 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 55: /* Stmt: PRINTFTK LPARENT STRCON Exps RPARENT SEMICN  */
+#line 400 "yacc/yacc.y"
+    {
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<Stmt>" << "\n";
+        printf("%s\n", "<Stmt>");
+    }
+#line 2060 "yacc/dmx_yacc.cpp"
     break;
 
   case 58: /* Exp: AddExp  */
-#line 380 "yacc/yacc.y"
+#line 414 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<Exp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<Exp>" << "\n";
         printf("%s\n", "<Exp>");
     }
-#line 2036 "yacc/dmx_yacc.cpp"
+#line 2071 "yacc/dmx_yacc.cpp"
     break;
 
   case 59: /* Cond: LOrExp  */
-#line 389 "yacc/yacc.y"
+#line 424 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<Cond>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<Cond>" << "\n";
         printf("%s\n", "<Cond>");
     }
-#line 2046 "yacc/dmx_yacc.cpp"
+#line 2082 "yacc/dmx_yacc.cpp"
     break;
 
   case 60: /* LVal: IDENFR L_Exps_R  */
-#line 398 "yacc/yacc.y"
+#line 434 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<LVal>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<LVal>" << "\n";
         printf("%s\n", "<LVal>");
     }
-#line 2056 "yacc/dmx_yacc.cpp"
+#line 2093 "yacc/dmx_yacc.cpp"
     break;
 
   case 63: /* PrimaryExp: LPARENT Exp RPARENT  */
-#line 411 "yacc/yacc.y"
+#line 448 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<PrimaryExp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<PrimaryExp>" << "\n";
         printf("%s\n", "<PrimaryExp>");
     }
-#line 2066 "yacc/dmx_yacc.cpp"
+#line 2104 "yacc/dmx_yacc.cpp"
     break;
 
   case 64: /* PrimaryExp: LVal  */
-#line 417 "yacc/yacc.y"
+#line 455 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<PrimaryExp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<PrimaryExp>" << "\n";
         printf("%s\n", "<PrimaryExp>");
     }
-#line 2076 "yacc/dmx_yacc.cpp"
+#line 2115 "yacc/dmx_yacc.cpp"
     break;
 
   case 65: /* PrimaryExp: Number  */
-#line 423 "yacc/yacc.y"
+#line 462 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<PrimaryExp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<PrimaryExp>" << "\n";
         printf("%s\n", "<PrimaryExp>");
-    }
-#line 2086 "yacc/dmx_yacc.cpp"
-    break;
-
-  case 66: /* Number: INTCON  */
-#line 432 "yacc/yacc.y"
-    {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<Number>");
-        printf("%s\n", "<Number>");
-    }
-#line 2096 "yacc/dmx_yacc.cpp"
-    break;
-
-  case 67: /* UnaryExp: PrimaryExp  */
-#line 441 "yacc/yacc.y"
-    {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<UnaryExp>");
-        printf("%s\n", "<UnaryExp>");
-    }
-#line 2106 "yacc/dmx_yacc.cpp"
-    break;
-
-  case 68: /* UnaryExp: IDENFR LPARENT RPARENT  */
-#line 447 "yacc/yacc.y"
-    {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<UnaryExp>");
-        printf("%s\n", "<UnaryExp>");
-    }
-#line 2116 "yacc/dmx_yacc.cpp"
-    break;
-
-  case 69: /* UnaryExp: IDENFR LPARENT FuncRParams RPARENT  */
-#line 453 "yacc/yacc.y"
-    {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<UnaryExp>");
-        printf("%s\n", "<UnaryExp>");
     }
 #line 2126 "yacc/dmx_yacc.cpp"
     break;
 
-  case 70: /* UnaryExp: UnaryOp UnaryExp  */
-#line 459 "yacc/yacc.y"
+  case 66: /* Number: INTCON  */
+#line 472 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<UnaryExp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<Number>" << "\n";
+        printf("%s\n", "<Number>");
+    }
+#line 2137 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 67: /* UnaryExp: PrimaryExp  */
+#line 482 "yacc/yacc.y"
+    {
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<UnaryExp>" << "\n";
         printf("%s\n", "<UnaryExp>");
     }
-#line 2136 "yacc/dmx_yacc.cpp"
+#line 2148 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 68: /* UnaryExp: IDENFR LPARENT RPARENT  */
+#line 489 "yacc/yacc.y"
+    {
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<UnaryExp>" << "\n";
+        printf("%s\n", "<UnaryExp>");
+    }
+#line 2159 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 69: /* UnaryExp: IDENFR LPARENT FuncRParams RPARENT  */
+#line 496 "yacc/yacc.y"
+    {
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<UnaryExp>" << "\n";
+        printf("%s\n", "<UnaryExp>");
+    }
+#line 2170 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 70: /* UnaryExp: UnaryOp UnaryExp  */
+#line 503 "yacc/yacc.y"
+    {
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<UnaryExp>" << "\n";
+        printf("%s\n", "<UnaryExp>");
+    }
+#line 2181 "yacc/dmx_yacc.cpp"
     break;
 
   case 71: /* UnaryOp: PLUS  */
-#line 467 "yacc/yacc.y"
+#line 512 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<UnaryOp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<UnaryOp>" << "\n";
         printf("%s\n", "<UnaryOp>");
     }
-#line 2146 "yacc/dmx_yacc.cpp"
+#line 2192 "yacc/dmx_yacc.cpp"
     break;
 
   case 72: /* UnaryOp: MINU  */
-#line 473 "yacc/yacc.y"
+#line 519 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<UnaryOp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<UnaryOp>" << "\n";
         printf("%s\n", "<UnaryOp>");
     }
-#line 2156 "yacc/dmx_yacc.cpp"
+#line 2203 "yacc/dmx_yacc.cpp"
     break;
 
   case 73: /* UnaryOp: NOT  */
-#line 479 "yacc/yacc.y"
+#line 526 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<UnaryOp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<UnaryOp>" << "\n";
         printf("%s\n", "<UnaryOp>");
     }
-#line 2166 "yacc/dmx_yacc.cpp"
+#line 2214 "yacc/dmx_yacc.cpp"
     break;
 
   case 74: /* FuncRParams: Exp Exps  */
-#line 488 "yacc/yacc.y"
+#line 536 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<FuncRParams>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<FuncRParams>" << "\n";
         printf("%s\n", "<FuncRParams>");
     }
-#line 2176 "yacc/dmx_yacc.cpp"
+#line 2225 "yacc/dmx_yacc.cpp"
     break;
 
   case 75: /* MulExp: UnaryExp  */
-#line 497 "yacc/yacc.y"
+#line 546 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<MulExp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<MulExp>" << "\n";
         printf("%s\n", "<MulExp>");
-    }
-#line 2186 "yacc/dmx_yacc.cpp"
-    break;
-
-  case 76: /* MulExp: MulExp MULT UnaryExp  */
-#line 503 "yacc/yacc.y"
-    {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<MulExp>");
-        printf("%s\n", "<MulExp>");
-    }
-#line 2196 "yacc/dmx_yacc.cpp"
-    break;
-
-  case 77: /* MulExp: MulExp DIV UnaryExp  */
-#line 509 "yacc/yacc.y"
-    {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<MulExp>");
-        printf("%s\n", "<MulExp>");
-    }
-#line 2206 "yacc/dmx_yacc.cpp"
-    break;
-
-  case 78: /* MulExp: MulExp MOD UnaryExp  */
-#line 515 "yacc/yacc.y"
-    {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<MulExp>");
-        printf("%s\n", "<MulExp>");
-    }
-#line 2216 "yacc/dmx_yacc.cpp"
-    break;
-
-  case 79: /* AddExp: MulExp  */
-#line 524 "yacc/yacc.y"
-    {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<AddExp>");
-        printf("%s\n", "<AddExp>");
-    }
-#line 2226 "yacc/dmx_yacc.cpp"
-    break;
-
-  case 80: /* AddExp: AddExp PLUS MulExp  */
-#line 530 "yacc/yacc.y"
-    {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<AddExp>");
-        printf("%s\n", "<AddExp>");
     }
 #line 2236 "yacc/dmx_yacc.cpp"
     break;
 
-  case 81: /* AddExp: AddExp MINU MulExp  */
-#line 536 "yacc/yacc.y"
+  case 76: /* MulExp: MulExp MULT UnaryExp  */
+#line 553 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<AddExp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<MulExp>" << "\n";
+        printf("%s\n", "<MulExp>");
+    }
+#line 2247 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 77: /* MulExp: MulExp DIV UnaryExp  */
+#line 560 "yacc/yacc.y"
+    {
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<MulExp>" << "\n";
+        printf("%s\n", "<MulExp>");
+    }
+#line 2258 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 78: /* MulExp: MulExp MOD UnaryExp  */
+#line 567 "yacc/yacc.y"
+    {
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<MulExp>" << "\n";
+        printf("%s\n", "<MulExp>");
+    }
+#line 2269 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 79: /* AddExp: MulExp  */
+#line 577 "yacc/yacc.y"
+    {
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<AddExp>" << "\n";
         printf("%s\n", "<AddExp>");
     }
-#line 2246 "yacc/dmx_yacc.cpp"
+#line 2280 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 80: /* AddExp: AddExp PLUS MulExp  */
+#line 584 "yacc/yacc.y"
+    {
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<AddExp>" << "\n";
+        printf("%s\n", "<AddExp>");
+    }
+#line 2291 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 81: /* AddExp: AddExp MINU MulExp  */
+#line 591 "yacc/yacc.y"
+    {
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<AddExp>" << "\n";
+        printf("%s\n", "<AddExp>");
+    }
+#line 2302 "yacc/dmx_yacc.cpp"
     break;
 
   case 82: /* RelExp: AddExp  */
-#line 545 "yacc/yacc.y"
+#line 601 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<RelExp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<RelExp>" << "\n";
         printf("%s\n", "<RelExp>");
     }
-#line 2256 "yacc/dmx_yacc.cpp"
+#line 2313 "yacc/dmx_yacc.cpp"
     break;
 
   case 83: /* RelExp: RelExp LSS AddExp  */
-#line 551 "yacc/yacc.y"
+#line 608 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<RelExp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<RelExp>" << "\n";
         printf("%s\n", "<RelExp>");
     }
-#line 2266 "yacc/dmx_yacc.cpp"
+#line 2324 "yacc/dmx_yacc.cpp"
     break;
 
   case 84: /* RelExp: RelExp GRE AddExp  */
-#line 557 "yacc/yacc.y"
+#line 615 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<RelExp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<RelExp>" << "\n";
         printf("%s\n", "<RelExp>");
     }
-#line 2276 "yacc/dmx_yacc.cpp"
+#line 2335 "yacc/dmx_yacc.cpp"
     break;
 
   case 85: /* RelExp: RelExp LEQ AddExp  */
-#line 563 "yacc/yacc.y"
+#line 622 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<RelExp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<RelExp>" << "\n";
         printf("%s\n", "<RelExp>");
-    }
-#line 2286 "yacc/dmx_yacc.cpp"
-    break;
-
-  case 86: /* RelExp: RelExp GEQ AddExp  */
-#line 569 "yacc/yacc.y"
-    {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<RelExp>");
-        printf("%s\n", "<RelExp>");
-    }
-#line 2296 "yacc/dmx_yacc.cpp"
-    break;
-
-  case 87: /* EqExp: RelExp  */
-#line 578 "yacc/yacc.y"
-    {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<EqExp>");
-        printf("%s\n", "<EqExp>");
-    }
-#line 2306 "yacc/dmx_yacc.cpp"
-    break;
-
-  case 88: /* EqExp: EqExp EQL RelExp  */
-#line 584 "yacc/yacc.y"
-    {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<EqExp>");
-        printf("%s\n", "<EqExp>");
-    }
-#line 2316 "yacc/dmx_yacc.cpp"
-    break;
-
-  case 89: /* EqExp: EqExp NEQ RelExp  */
-#line 590 "yacc/yacc.y"
-    {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<EqExp>");
-        printf("%s\n", "<EqExp>");
-    }
-#line 2326 "yacc/dmx_yacc.cpp"
-    break;
-
-  case 90: /* LAndExp: EqExp  */
-#line 599 "yacc/yacc.y"
-    {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<LAndExp>");
-        printf("%s\n", "<LAndExp>");
-    }
-#line 2336 "yacc/dmx_yacc.cpp"
-    break;
-
-  case 91: /* LAndExp: LAndExp AND EqExp  */
-#line 605 "yacc/yacc.y"
-    {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<LAndExp>");
-        printf("%s\n", "<LAndExp>");
     }
 #line 2346 "yacc/dmx_yacc.cpp"
     break;
 
-  case 92: /* LOrExp: LAndExp  */
-#line 614 "yacc/yacc.y"
+  case 86: /* RelExp: RelExp GEQ AddExp  */
+#line 629 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<LOrExp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<RelExp>" << "\n";
+        printf("%s\n", "<RelExp>");
+    }
+#line 2357 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 87: /* EqExp: RelExp  */
+#line 639 "yacc/yacc.y"
+    {
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<EqExp>" << "\n";
+        printf("%s\n", "<EqExp>");
+    }
+#line 2368 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 88: /* EqExp: EqExp EQL RelExp  */
+#line 646 "yacc/yacc.y"
+    {
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<EqExp>" << "\n";
+        printf("%s\n", "<EqExp>");
+    }
+#line 2379 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 89: /* EqExp: EqExp NEQ RelExp  */
+#line 653 "yacc/yacc.y"
+    {
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<EqExp>" << "\n";
+        printf("%s\n", "<EqExp>");
+    }
+#line 2390 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 90: /* LAndExp: EqExp  */
+#line 663 "yacc/yacc.y"
+    {
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<LAndExp>" << "\n";
+        printf("%s\n", "<LAndExp>");
+    }
+#line 2401 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 91: /* LAndExp: LAndExp AND EqExp  */
+#line 670 "yacc/yacc.y"
+    {
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<LAndExp>" << "\n";
+        printf("%s\n", "<LAndExp>");
+    }
+#line 2412 "yacc/dmx_yacc.cpp"
+    break;
+
+  case 92: /* LOrExp: LAndExp  */
+#line 680 "yacc/yacc.y"
+    {
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<LOrExp>" << "\n";
         printf("%s\n", "<LOrExp>");
     }
-#line 2356 "yacc/dmx_yacc.cpp"
+#line 2423 "yacc/dmx_yacc.cpp"
     break;
 
   case 93: /* LOrExp: LOrExp OR LAndExp  */
-#line 620 "yacc/yacc.y"
+#line 687 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<LOrExp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<LOrExp>" << "\n";
         printf("%s\n", "<LOrExp>");
     }
-#line 2366 "yacc/dmx_yacc.cpp"
+#line 2434 "yacc/dmx_yacc.cpp"
     break;
 
   case 94: /* ConstExp: AddExp  */
-#line 629 "yacc/yacc.y"
+#line 697 "yacc/yacc.y"
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<ConstExp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<ConstExp>" << "\n";
         printf("%s\n", "<ConstExp>");
     }
-#line 2376 "yacc/dmx_yacc.cpp"
+#line 2445 "yacc/dmx_yacc.cpp"
     break;
 
 
-#line 2380 "yacc/dmx_yacc.cpp"
+#line 2449 "yacc/dmx_yacc.cpp"
 
       default: break;
     }
@@ -2605,7 +2674,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 635 "yacc/yacc.y"
+#line 704 "yacc/yacc.y"
 
 
 int yywrap(){
@@ -2630,6 +2699,6 @@ int SysY_parse(const char* parse_string, const char* path)
 
     yylex_destroy(scanner); 
 
-    fclose(output_yacc);
+    output_file.close();
     return result;
 }

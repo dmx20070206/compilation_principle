@@ -4,18 +4,19 @@
 #include <string.h>
 #include <vector>
 #include <algorithm>
+#include <fstream>
 
 #include "../yacc/dmx_yacc.hpp"
 #include "../lex/dmx_lex.h"
 
 using namespace std;
 
-FILE *output_yacc = fopen("output_first.txt", "w");
+ofstream output_file("output_first.txt");
 extern unordered_map<int, char *> token_map;
 
 int yyerror(YYLTYPE *llocp, const char *parse_string, yyscan_t scanner, const char *msg)
 {
-    fprintf(output_yacc, "Syntax error: %s\n", msg);
+    output_file << "Syntax error: %s\n" << msg;
     return 0;
 }
 
@@ -85,8 +86,9 @@ int cur_token = -1;
 CompUnit:
     CompUnitList
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<CompUnit>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";  
+        output_file << "<CompUnit>" << "\n";
         printf("%s\n", "<CompUnit>");
     }
     ;
@@ -111,8 +113,9 @@ Decl:
 ConstDecl:
     CONSTTK TYPETK ConstDef ConstDefs SEMICN
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<ConstDecl>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<ConstDecl>" << "\n";
         printf("%s\n", "<ConstDecl>");
     }
     ;
@@ -126,8 +129,9 @@ ConstDefs:
 ConstDef:
     IDENFR L_ConstExps_R ASSIGN ConstInitVal
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<ConstDef>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<ConstDef>" << "\n";
         printf("%s\n", "<ConstDef>");
     }
     ;
@@ -141,20 +145,23 @@ L_ConstExps_R:
 ConstInitVal:
     ConstExp
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<ConstInitVal>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<ConstInitVal>" << "\n";
         printf("%s\n", "<ConstInitVal>");
     }
     | LBRACE RBRACE
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<ConstInitVal>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<ConstInitVal>" << "\n";
         printf("%s\n", "<ConstInitVal>");
     }
     | LBRACE ConstInitVal ConstInitVals RBRACE
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<ConstInitVal>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<ConstInitVal>" << "\n";
         printf("%s\n", "<ConstInitVal>");
     }
     ;
@@ -168,8 +175,9 @@ ConstInitVals:
 VarDecl:
     TYPETK VarDef VarDefs SEMICN
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<VarDecl>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<VarDecl>" << "\n";
         printf("%s\n", "<VarDecl>");
     }
     ;
@@ -183,14 +191,16 @@ VarDefs:
 VarDef:
     IDENFR L_ConstExps_R
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<VarDef>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<VarDef>" << "\n";
         printf("%s\n", "<VarDef>");
     }
     | IDENFR L_ConstExps_R ASSIGN InitVal
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<VarDef>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<VarDef>" << "\n";
         printf("%s\n", "<VarDef>");
     }
     ;
@@ -198,20 +208,23 @@ VarDef:
 InitVal:
     Exp
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<InitVal>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<InitVal>" << "\n";
         printf("%s\n", "<InitVal>");
     }
     | LBRACE RBRACE
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<InitVal>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<InitVal>" << "\n";
         printf("%s\n", "<InitVal>");
     }
     | LBRACE InitVal InitVals RBRACE
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<InitVal>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<InitVal>" << "\n";
         printf("%s\n", "<InitVal>");
     }
     ;
@@ -224,26 +237,30 @@ InitVals:
 FuncDef:
     TYPETK IDENFR LPARENT RPARENT Block
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<FuncDef>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<FuncDef>" << "\n";
         printf("%s\n", "<FuncDef>");
     }
     | TYPETK IDENFR LPARENT FuncFParam FuncFParams RPARENT Block
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<FuncDef>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<FuncDef>" << "\n";
         printf("%s\n", "<FuncDef>");
     }
     | TYPETK MAINTK LPARENT RPARENT Block
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<MainFuncDef>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<MainFuncDef>" << "\n";
         printf("%s\n", "<MainFuncDef>");
     }
     | TYPETK MAINTK LPARENT FuncFParam FuncFParams RPARENT Block
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<MainFuncDef>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<MainFuncDef>" << "\n";
         printf("%s\n", "<MainFuncDef>");
     }
     ;
@@ -251,8 +268,9 @@ FuncDef:
 FuncFParams:
     | COMMA FuncFParam FuncFParams
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<FuncFParams>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<FuncFParams>" << "\n";
         printf("%s\n", "<FuncFParams>");
     }
     ;
@@ -260,14 +278,16 @@ FuncFParams:
 FuncFParam:
     TYPETK IDENFR
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<FuncFParam>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<FuncFParam>" << "\n";
         printf("%s\n", "<FuncFParam>");
     }
     | TYPETK IDENFR LBRACK RBRACK L_ConstExps_R
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<FuncFParam>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<FuncFParam>" << "\n";
         printf("%s\n", "<FuncFParam>");
     }
     ;
@@ -275,8 +295,9 @@ FuncFParam:
 Block:
     LBRACE BlockItems RBRACE
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<Block>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<Block>" << "\n";
         printf("%s\n", "<Block>");
     }
     ;
@@ -293,80 +314,93 @@ BlockItems:
 Stmt:
     LVal ASSIGN Exp SEMICN
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<Stmt>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<Stmt>" << "\n";
         printf("%s\n", "<Stmt>");
     }
     | SEMICN
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<Stmt>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<Stmt>" << "\n";
         printf("%s\n", "<Stmt>");
     }
     | Exp SEMICN
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<Stmt>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<Stmt>" << "\n";
         printf("%s\n", "<Stmt>");
     }
     | Block
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<Stmt>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<Stmt>" << "\n";
         printf("%s\n", "<Stmt>");
     }
     | IFTK LPARENT Cond RPARENT Stmt ELSETK Stmt
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<Stmt>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<Stmt>" << "\n";
         printf("%s\n", "<Stmt>");
     }
     | IFTK LPARENT Cond RPARENT Stmt %prec IFTK
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<Stmt>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<Stmt>" << "\n";
         printf("%s\n", "<Stmt>");
     }
     | WHILETK LPARENT Cond RPARENT Stmt
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<Stmt>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<Stmt>" << "\n";
         printf("%s\n", "<Stmt>");
     }
     | BREAKTK SEMICN
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<Stmt>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<Stmt>" << "\n";
         printf("%s\n", "<Stmt>");
     }
     | CONTINUETK SEMICN
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<Stmt>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<Stmt>" << "\n";
         printf("%s\n", "<Stmt>");
     }
     | RETURNTK SEMICN
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<Stmt>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<Stmt>" << "\n";
         printf("%s\n", "<Stmt>");
     }
     | RETURNTK Exp SEMICN
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<Stmt>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<Stmt>" << "\n";
         printf("%s\n", "<Stmt>");
     }
     | LVal ASSIGN GETINTTK LPARENT RPARENT SEMICN
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<Stmt>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<Stmt>" << "\n";
         printf("%s\n", "<Stmt>");
     }
     | PRINTFTK LPARENT STRCON Exps RPARENT SEMICN
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<Stmt>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<Stmt>" << "\n";
         printf("%s\n", "<Stmt>");
     }
     ;
@@ -378,8 +412,9 @@ Exps:
 Exp:
     AddExp
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<Exp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<Exp>" << "\n";
         printf("%s\n", "<Exp>");
     }
     ;
@@ -387,8 +422,9 @@ Exp:
 Cond:
     LOrExp
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<Cond>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<Cond>" << "\n";
         printf("%s\n", "<Cond>");
     }
     ;
@@ -396,8 +432,9 @@ Cond:
 LVal:
     IDENFR L_Exps_R
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<LVal>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<LVal>" << "\n";
         printf("%s\n", "<LVal>");
     }
     ;
@@ -409,20 +446,23 @@ L_Exps_R:
 PrimaryExp:
     LPARENT Exp RPARENT
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<PrimaryExp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<PrimaryExp>" << "\n";
         printf("%s\n", "<PrimaryExp>");
     }
     | LVal
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<PrimaryExp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<PrimaryExp>" << "\n";
         printf("%s\n", "<PrimaryExp>");
     }
     | Number
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<PrimaryExp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<PrimaryExp>" << "\n";
         printf("%s\n", "<PrimaryExp>");
     }
     ;
@@ -430,8 +470,9 @@ PrimaryExp:
 Number:
     INTCON
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<Number>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<Number>" << "\n";
         printf("%s\n", "<Number>");
     }
     ;
@@ -439,46 +480,53 @@ Number:
 UnaryExp:
     PrimaryExp
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<UnaryExp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<UnaryExp>" << "\n";
         printf("%s\n", "<UnaryExp>");
     }
     | IDENFR LPARENT RPARENT
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<UnaryExp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<UnaryExp>" << "\n";
         printf("%s\n", "<UnaryExp>");
     }
     | IDENFR LPARENT FuncRParams RPARENT
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<UnaryExp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<UnaryExp>" << "\n";
         printf("%s\n", "<UnaryExp>");
     }
     | UnaryOp UnaryExp
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<UnaryExp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<UnaryExp>" << "\n";
         printf("%s\n", "<UnaryExp>");
     }
 
 UnaryOp:
     PLUS
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<UnaryOp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<UnaryOp>" << "\n";
         printf("%s\n", "<UnaryOp>");
     }
     | MINU
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<UnaryOp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<UnaryOp>" << "\n";
         printf("%s\n", "<UnaryOp>");
     }
     | NOT
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<UnaryOp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<UnaryOp>" << "\n";
         printf("%s\n", "<UnaryOp>");
     }
     ;
@@ -486,8 +534,9 @@ UnaryOp:
 FuncRParams:
     Exp Exps
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<FuncRParams>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<FuncRParams>" << "\n";
         printf("%s\n", "<FuncRParams>");
     }
     ;
@@ -495,26 +544,30 @@ FuncRParams:
 MulExp:
     UnaryExp
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<MulExp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<MulExp>" << "\n";
         printf("%s\n", "<MulExp>");
     }
     | MulExp MULT UnaryExp
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<MulExp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<MulExp>" << "\n";
         printf("%s\n", "<MulExp>");
     }
     | MulExp DIV UnaryExp
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<MulExp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<MulExp>" << "\n";
         printf("%s\n", "<MulExp>");
     }
     | MulExp MOD UnaryExp
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<MulExp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<MulExp>" << "\n";
         printf("%s\n", "<MulExp>");
     }
     ;
@@ -522,20 +575,23 @@ MulExp:
 AddExp:
     MulExp
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<AddExp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<AddExp>" << "\n";
         printf("%s\n", "<AddExp>");
     }
     | AddExp PLUS MulExp
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<AddExp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<AddExp>" << "\n";
         printf("%s\n", "<AddExp>");
     }
     | AddExp MINU MulExp
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<AddExp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<AddExp>" << "\n";
         printf("%s\n", "<AddExp>");
     }
     ;
@@ -543,32 +599,37 @@ AddExp:
 RelExp:
     AddExp
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<RelExp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<RelExp>" << "\n";
         printf("%s\n", "<RelExp>");
     }
     | RelExp LSS AddExp
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<RelExp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<RelExp>" << "\n";
         printf("%s\n", "<RelExp>");
     }
     | RelExp GRE AddExp
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<RelExp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<RelExp>" << "\n";
         printf("%s\n", "<RelExp>");
     }
     | RelExp LEQ AddExp
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<RelExp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<RelExp>" << "\n";
         printf("%s\n", "<RelExp>");
     }
     | RelExp GEQ AddExp
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<RelExp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<RelExp>" << "\n";
         printf("%s\n", "<RelExp>");
     }
     ;
@@ -576,20 +637,23 @@ RelExp:
 EqExp:
     RelExp
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<EqExp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<EqExp>" << "\n";
         printf("%s\n", "<EqExp>");
     }
     | EqExp EQL RelExp
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<EqExp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<EqExp>" << "\n";
         printf("%s\n", "<EqExp>");
     }
     | EqExp NEQ RelExp
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<EqExp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<EqExp>" << "\n";
         printf("%s\n", "<EqExp>");
     }
     ;
@@ -597,14 +661,16 @@ EqExp:
 LAndExp:
     EqExp
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<LAndExp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<LAndExp>" << "\n";
         printf("%s\n", "<LAndExp>");
     }
     | LAndExp AND EqExp
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<LAndExp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<LAndExp>" << "\n";
         printf("%s\n", "<LAndExp>");
     }
     ;
@@ -612,14 +678,16 @@ LAndExp:
 LOrExp:
     LAndExp
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<LOrExp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<LOrExp>" << "\n";
         printf("%s\n", "<LOrExp>");
     }
     | LOrExp OR LAndExp
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<LOrExp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<LOrExp>" << "\n";
         printf("%s\n", "<LOrExp>");
     }
     ;
@@ -627,8 +695,9 @@ LOrExp:
 ConstExp:
     AddExp
     {
-        cur_token = yychar;
-        fprintf(output_yacc, "%s\n", "<ConstExp>");
+        if (yychar == -2)
+            output_file << "DMX20070206" << "\n";
+        output_file << "<ConstExp>" << "\n";
         printf("%s\n", "<ConstExp>");
     }
     ;
@@ -656,6 +725,6 @@ int SysY_parse(const char* parse_string, const char* path)
 
     yylex_destroy(scanner); 
 
-    fclose(output_yacc);
+    output_file.close();
     return result;
 }

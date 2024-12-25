@@ -1,7 +1,7 @@
 #include "yacc/dmx_yacc.cpp"
 #include <fstream>
 
-#define MAX_LINE_LENGTH 1024
+vector<string> lines;
 
 int main()
 {
@@ -16,46 +16,31 @@ int main()
     string total;
     while (getline(inputFile, line))
         total += line + '\n';
-    SysY_parse(total.c_str(), "testfile.txt");
-
     inputFile.close();
 
+    SysY_parse(total.c_str(), "testfile.txt");
+
     // 处理三个问题
-    // 1 遇到 DMX 时删除并向上交换
-    // 2 倒数第四行添加 RBRACE }
-    // 3 INTTK + IDENFR + LPARENT 时，添加 <FuncType>
+    // 1 遇到 < 打头的东西向上交换，如果是 DMX20070206 需要删除
+    // 2 INTTK + IDENFR + LPARENT 时，添加 <FuncType>
 
-    FILE *file = fopen("output_first.txt", "r");
+    ifstream output_first("output_first.txt");
 
-    vector<string> lines;
-    char buffer[1024];
-    while (fgets(buffer, sizeof(buffer), file))
-    {
-        std::string line(buffer);
-        if (!line.empty() && line.back() == '\n')
-        {
-            line.pop_back();
-        }
-
+    while (std::getline(output_first, line))
         lines.push_back(line);
-    }
 
-    printf("%d\n", (int)lines.size());
-
-    // 2 倒数第四行添加 RBRACE }
-    lines.insert(lines.begin() + lines.size() - 3, "RBRACE }");
-
-    // 1 遇到 DMX 时删除并向上交换
-    for (int i = 0; i < lines.size(); i++)
+    // 1 遇到 < 打头的东西向上交换，如果是 DMX20070206 需要删除
+    for (int i = 1; i < lines.size(); i++)
     {
-        if (!lines[i].empty() && lines[i].substr(0, 3) == "DMX")
+        if (lines[i][0] == '<')
         {
-            lines[i].erase(0, 3);
             swap(lines[i], lines[i - 1]);
+            if (lines[i] == "DMX20070206")
+                lines.erase(lines.begin() + i);
         }
     }
 
-    // 3 INTTK + IDENFR + LPARENT 时，添加 <FuncType>
+    // 2 INTTK + IDENFR + LPARENT 时，添加 <FuncType>
     for (int i = 2; i < lines.size(); i++)
     {
         if (lines[i].find("LPARENT") != string::npos && lines[i - 1].find("IDENFR") != string::npos && lines[i - 2].find("INTTK") != string::npos)
@@ -72,5 +57,10 @@ int main()
         final_file << lines[i] << "\n";
     }
 
+    final_file.close();
+    output_first.close();
+
+    lines.clear();
+    lines.resize(0);
     return 0;
 }

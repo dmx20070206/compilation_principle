@@ -1,5 +1,3 @@
-int func() {}
-
 int main(){
     int c;
     c= getint();

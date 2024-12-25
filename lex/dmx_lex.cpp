@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <vector>
 #include <unordered_map>
+#include <fstream>
 using namespace std;
 
 #define YY_TYPEDEF_YY_SIZE_T
@@ -18,7 +19,7 @@ do {                                                         \
 }                                                            \
 while (0);
 
-#line 22 "lex/dmx_lex.cpp"
+#line 23 "lex/dmx_lex.cpp"
 
 #define  YY_INT_ALIGNED short int
 
@@ -539,7 +540,7 @@ static const flex_int16_t yy_chk[179] =
 #define YY_NO_INPUT 1
 /* 与yacc的接口,生成与 Bison 的纯解析器(pure parser)兼容的代码 */
 /* 支持位置跟踪 */
-#line 33 "lex/lex.l"
+#line 34 "lex/lex.l"
 #include "../yacc/dmx_yacc.hpp"
 
 unordered_map<int, char *> token_map = {
@@ -583,53 +584,30 @@ unordered_map<int, char *> token_map = {
     {295, (char *)"ERROR "}                    // ERROR
 };
 
-extern FILE *output_yacc;
-int last_token = 20070206;
-char *last_text = nullptr;
-
-extern int cur_token;
+extern ofstream output_file;
 
 void output(int token, char *text) 
 {
-    if(last_token == 20070206 || last_text == nullptr)
-    {
-        last_token = token;
-        last_text = strdup(text);
-        return;
-    }
-
     char *temp = nullptr;
 
     // TYPETK 的特殊判断
-    if(strcmp((char *)token_map[last_token], (char *)"TYPETK ") == 0)
+    if(strcmp((char *)token_map[token], (char *)"TYPETK ") == 0)
     {
-        temp = strcmp((char *)"int", last_text) == 0 ? strdup((char *)"INTTK ") : strdup((char *)"VOIDTK ");
+        temp = strcmp((char *)"int", text) == 0 ? strdup((char *)"INTTK ") : strdup((char *)"VOIDTK ");
     }
     else
     {
-        temp = strdup((char *)token_map[last_token]); 
+        temp = strdup((char *)token_map[token]); 
     }
-    strcat(temp, last_text); 
-    if(cur_token == -2)
-    {
-        printf("%s %d\n", temp, cur_token);
-        fprintf(output_yacc, "DMX%s\n", temp);
-    }
-    else
-    {
-        printf("%s\n", temp);
-        fprintf(output_yacc, "%s\n", temp);
-    }
-
-    last_token = token;
-    last_text = strdup(text);
-
-    cur_token = -1;
+    output_file << temp << text << "\n";
+    strcat(temp, text); 
+    printf("%s\n", temp);
+    delete[] temp;
 }
 
 #define RETURN_TOKEN(token) return token;
-#line 632 "lex/dmx_lex.cpp"
-#line 633 "lex/dmx_lex.cpp"
+#line 610 "lex/dmx_lex.cpp"
+#line 611 "lex/dmx_lex.cpp"
 
 #define INITIAL 0
 
@@ -911,9 +889,9 @@ YY_DECL
 		}
 
 	{
-#line 123 "lex/lex.l"
+#line 101 "lex/lex.l"
 
-#line 917 "lex/dmx_lex.cpp"
+#line 895 "lex/dmx_lex.cpp"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -972,223 +950,223 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 124 "lex/lex.l"
+#line 102 "lex/lex.l"
 { output(WHILETK, yytext);    RETURN_TOKEN(WHILETK);    }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 125 "lex/lex.l"
+#line 103 "lex/lex.l"
 { output(CONSTTK, yytext);    RETURN_TOKEN(CONSTTK);    }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 126 "lex/lex.l"
+#line 104 "lex/lex.l"
 { output(GETINTTK, yytext);   RETURN_TOKEN(GETINTTK);   }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 127 "lex/lex.l"
+#line 105 "lex/lex.l"
 { output(PRINTFTK, yytext);   RETURN_TOKEN(PRINTFTK);   }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 128 "lex/lex.l"
+#line 106 "lex/lex.l"
 { output(BREAKTK, yytext);    RETURN_TOKEN(BREAKTK);    }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 129 "lex/lex.l"
+#line 107 "lex/lex.l"
 { output(RETURNTK, yytext);   RETURN_TOKEN(RETURNTK);   }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 130 "lex/lex.l"
+#line 108 "lex/lex.l"
 { output(CONTINUETK, yytext); RETURN_TOKEN(CONTINUETK); }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 131 "lex/lex.l"
+#line 109 "lex/lex.l"
 { output(IFTK, yytext);       RETURN_TOKEN(IFTK);       }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 132 "lex/lex.l"
+#line 110 "lex/lex.l"
 { output(ELSETK, yytext);     RETURN_TOKEN(ELSETK);     }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 133 "lex/lex.l"
+#line 111 "lex/lex.l"
 { output(TYPETK, yytext);     RETURN_TOKEN(TYPETK);     }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 134 "lex/lex.l"
+#line 112 "lex/lex.l"
 { output(TYPETK, yytext);     RETURN_TOKEN(TYPETK);     }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 135 "lex/lex.l"
+#line 113 "lex/lex.l"
 { output(MAINTK, yytext);     RETURN_TOKEN(MAINTK);     }    
 	YY_BREAK
 case 13:
 /* rule 13 can match eol */
 YY_RULE_SETUP
-#line 136 "lex/lex.l"
+#line 114 "lex/lex.l"
 
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 137 "lex/lex.l"
+#line 115 "lex/lex.l"
 
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 139 "lex/lex.l"
+#line 117 "lex/lex.l"
 { output(IDENFR, yytext);     RETURN_TOKEN(IDENFR);     }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 140 "lex/lex.l"
+#line 118 "lex/lex.l"
 { output(INTCON, yytext);     RETURN_TOKEN(INTCON);     }
 	YY_BREAK
 case 17:
 /* rule 17 can match eol */
 YY_RULE_SETUP
-#line 141 "lex/lex.l"
+#line 119 "lex/lex.l"
 { output(STRCON, yytext);     RETURN_TOKEN(STRCON);     }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 143 "lex/lex.l"
+#line 121 "lex/lex.l"
 { output(NOT, yytext);        RETURN_TOKEN(NOT);        }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 144 "lex/lex.l"
+#line 122 "lex/lex.l"
 { output(MULT, yytext);       RETURN_TOKEN(MULT);       }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 145 "lex/lex.l"
+#line 123 "lex/lex.l"
 { output(PLUS, yytext);       RETURN_TOKEN(PLUS);       }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 146 "lex/lex.l"
+#line 124 "lex/lex.l"
 { output(MINU, yytext);       RETURN_TOKEN(MINU);       }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 147 "lex/lex.l"
+#line 125 "lex/lex.l"
 { output(DIV, yytext);        RETURN_TOKEN(DIV);        }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 148 "lex/lex.l"
+#line 126 "lex/lex.l"
 { output(MOD, yytext);        RETURN_TOKEN(MOD);        }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 149 "lex/lex.l"
+#line 127 "lex/lex.l"
 { output(AND, yytext);        RETURN_TOKEN(AND);        }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 150 "lex/lex.l"
+#line 128 "lex/lex.l"
 { output(OR, yytext);         RETURN_TOKEN(OR);         }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 151 "lex/lex.l"
+#line 129 "lex/lex.l"
 { output(EQL, yytext);        RETURN_TOKEN(EQL);        }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 152 "lex/lex.l"
+#line 130 "lex/lex.l"
 { output(NEQ, yytext);        RETURN_TOKEN(NEQ);        }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 153 "lex/lex.l"
+#line 131 "lex/lex.l"
 { output(LEQ, yytext);        RETURN_TOKEN(LEQ);        }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 154 "lex/lex.l"
+#line 132 "lex/lex.l"
 { output(GEQ, yytext);        RETURN_TOKEN(GEQ);        }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 155 "lex/lex.l"
+#line 133 "lex/lex.l"
 { output(LSS, yytext);        RETURN_TOKEN(LSS);        }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 156 "lex/lex.l"
+#line 134 "lex/lex.l"
 { output(GRE, yytext);        RETURN_TOKEN(GRE);        }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 158 "lex/lex.l"
+#line 136 "lex/lex.l"
 { output(ASSIGN, yytext);     RETURN_TOKEN(ASSIGN);     }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 159 "lex/lex.l"
+#line 137 "lex/lex.l"
 { output(SEMICN, yytext);     RETURN_TOKEN(SEMICN);     }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 160 "lex/lex.l"
+#line 138 "lex/lex.l"
 { output(COMMA, yytext);      RETURN_TOKEN(COMMA);      } 
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 161 "lex/lex.l"
+#line 139 "lex/lex.l"
 { output(LPARENT, yytext);    RETURN_TOKEN(LPARENT);    }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 162 "lex/lex.l"
+#line 140 "lex/lex.l"
 { output(RPARENT, yytext);    RETURN_TOKEN(RPARENT);    }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 163 "lex/lex.l"
+#line 141 "lex/lex.l"
 { output(LBRACK, yytext);     RETURN_TOKEN(LBRACK);     }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 164 "lex/lex.l"
+#line 142 "lex/lex.l"
 { output(RBRACK, yytext);     RETURN_TOKEN(RBRACK);     }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 165 "lex/lex.l"
+#line 143 "lex/lex.l"
 { output(LBRACE, yytext);     RETURN_TOKEN(LBRACE);     }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 166 "lex/lex.l"
+#line 144 "lex/lex.l"
 { output(RBRACE, yytext);     RETURN_TOKEN(RBRACE);     }
 	YY_BREAK
 case 41:
 /* rule 41 can match eol */
 YY_RULE_SETUP
-#line 168 "lex/lex.l"
+#line 146 "lex/lex.l"
 
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 169 "lex/lex.l"
+#line 147 "lex/lex.l"
 
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 171 "lex/lex.l"
+#line 149 "lex/lex.l"
 ECHO;
 	YY_BREAK
-#line 1192 "lex/dmx_lex.cpp"
+#line 1170 "lex/dmx_lex.cpp"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2343,7 +2321,7 @@ void yyfree (void * ptr , yyscan_t yyscanner)
 
 #define YYTABLES_NAME "yytables"
 
-#line 171 "lex/lex.l"
+#line 149 "lex/lex.l"
 
 void scan_string(const char *str, yyscan_t scanner)
 {

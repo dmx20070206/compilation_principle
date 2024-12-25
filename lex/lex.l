@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <vector>
 #include <unordered_map>
+#include <fstream>
 using namespace std;
 
 #define YY_TYPEDEF_YY_SIZE_T
@@ -73,48 +74,25 @@ unordered_map<int, char *> token_map = {
     {295, (char *)"ERROR "}                    // ERROR
 };
 
-extern FILE *output_yacc;
-int last_token = 20070206;
-char *last_text = nullptr;
-
-extern int cur_token;
+extern ofstream output_file;
 
 void output(int token, char *text) 
 {
-    if(last_token == 20070206 || last_text == nullptr)
-    {
-        last_token = token;
-        last_text = strdup(text);
-        return;
-    }
-
     char *temp = nullptr;
 
     // TYPETK 的特殊判断
-    if(strcmp((char *)token_map[last_token], (char *)"TYPETK ") == 0)
+    if(strcmp((char *)token_map[token], (char *)"TYPETK ") == 0)
     {
-        temp = strcmp((char *)"int", last_text) == 0 ? strdup((char *)"INTTK ") : strdup((char *)"VOIDTK ");
+        temp = strcmp((char *)"int", text) == 0 ? strdup((char *)"INTTK ") : strdup((char *)"VOIDTK ");
     }
     else
     {
-        temp = strdup((char *)token_map[last_token]); 
+        temp = strdup((char *)token_map[token]); 
     }
-    strcat(temp, last_text); 
-    if(cur_token == -2)
-    {
-        printf("%s %d\n", temp, cur_token);
-        fprintf(output_yacc, "DMX%s\n", temp);
-    }
-    else
-    {
-        printf("%s\n", temp);
-        fprintf(output_yacc, "%s\n", temp);
-    }
-
-    last_token = token;
-    last_text = strdup(text);
-
-    cur_token = -1;
+    output_file << temp << text << "\n";
+    strcat(temp, text); 
+    printf("%s\n", temp);
+    delete[] temp;
 }
 
 #define RETURN_TOKEN(token) return token;

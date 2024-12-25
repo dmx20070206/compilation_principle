@@ -1,13 +1,4 @@
 INTTK int
-<FuncType>
-IDENFR func
-LPARENT (
-RPARENT )
-LBRACE {
-<Block>
-RBRACE }
-<FuncDef>
-INTTK int
 MAINTK main
 LPARENT (
 RPARENT )
