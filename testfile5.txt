@@ -1,0 +1,40 @@
+int main()
+{
+    printf("U202242019");
+
+    // int and const
+    int a1 = 10;
+    const int b1 = 10;
+
+    // if
+    if(a1 == 10);
+    if(a1 != 10);
+    if(a1 > 10);
+    if(a1 < 10);
+    if(a1 <= 10);
+    if(a1 >= 10);
+    if(!a1);
+    if(a1 > 10 && a1 == 10);
+    if(a1 > 10 || a1 < 10);
+
+    a1 = 1 + 1 - 1;
+    a1 = 1 * 1 / 1;
+    a1 = (1);
+    a1 = +(1);
+    a1 = -(1);
+    a1 = a1 % 1;
+    a1 = a1;
+
+    printf("\n! ()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~");
+
+    // while
+    while (!a1)
+    {
+        a1 = 1;
+        if (a1 == 1)
+            break;
+        else continue;
+    }
+
+    return 0;
+}

@@ -1,0 +1,15 @@
+void func(int arr1[], int arr2[][1], int arr3[]){
+    return;
+}
+
+int main()
+{
+    printf("U202242019");
+
+    int a2[1] = {1};
+    int a3[1][1] = {{1, 1}};
+
+    func(a2, a3, a3[0]);
+
+    return 0;
+}
